@@ -1,0 +1,77 @@
+[gd_scene load_steps=9 format=3 uid="uid://hfd6aam6qf82"]
+
+[ext_resource type="Texture2D" uid="uid://t8pgk85mr6tj" path="res://Assets/kenney_prototype-textures/Vector/texture_02.svg" id="1_l2n5c"]
+[ext_resource type="Material" uid="uid://dxyg365ffw3cb" path="res://Assets/Materials/StoneMaterial.tres" id="2_3p5fy"]
+[ext_resource type="PackedScene" uid="uid://xj4im0umqm43" path="res://Player/Player.tscn" id="3_oomu2"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_rvrnh"]
+
+[sub_resource type="Sky" id="Sky_1a5f7"]
+sky_material = SubResource("ProceduralSkyMaterial_rvrnh")
+
+[sub_resource type="Environment" id="Environment_viek2"]
+background_mode = 2
+sky = SubResource("Sky_1a5f7")
+tonemap_mode = 2
+glow_enabled = true
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_2tojc"]
+albedo_texture = ExtResource("1_l2n5c")
+uv1_scale = Vector3(200, 200, 200)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_twxhu"]
+albedo_color = Color(0.298039, 0.298039, 0.298039, 1)
+
+[node name="Sandbox" type="Node3D"]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_viek2")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(-0.866025, -0.433013, 0.25, 0, 0.5, 0.866025, -0.5, 0.75, -0.433013, 0, 0, 0)
+shadow_enabled = true
+
+[node name="Floor" type="CSGBox3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 53.3417, 0, 38.6995)
+material_override = SubResource("StandardMaterial3D_2tojc")
+use_collision = true
+size = Vector3(200, 1, 200)
+material = SubResource("StandardMaterial3D_twxhu")
+
+[node name="Blocks" type="Node3D" parent="."]
+
+[node name="Block" type="CSGBox3D" parent="Blocks"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, 3, -19.3241)
+use_collision = true
+size = Vector3(10, 5, 5)
+material = ExtResource("2_3p5fy")
+
+[node name="Block4" type="CSGBox3D" parent="Blocks"]
+transform = Transform3D(0.840576, 0, -0.541694, 0, 1, 0, 0.541694, 0, 0.840576, 28.5859, 4.98642, 37.879)
+use_collision = true
+size = Vector3(10, 8.97284, 17.9951)
+material = ExtResource("2_3p5fy")
+
+[node name="Block5" type="CSGBox3D" parent="Blocks"]
+transform = Transform3D(0.840576, 0, -0.541694, 0, 1, 0, 0.541694, 0, 0.840576, 43.2329, 8.791, 53.6889)
+use_collision = true
+size = Vector3(22.2831, 16.582, 4.638)
+material = ExtResource("2_3p5fy")
+
+[node name="Block2" type="CSGBox3D" parent="Blocks"]
+transform = Transform3D(1, 0, 0, 0, 0.965926, 0.258819, 0, -0.258819, 0.965926, -1.617, 0.912515, 27.9119)
+use_collision = true
+size = Vector3(8.56885, 5, 25)
+material = ExtResource("2_3p5fy")
+
+[node name="Block3" type="CSGBox3D" parent="Blocks"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 15, -9)
+use_collision = true
+size = Vector3(6, 5, 5)
+material = ExtResource("2_3p5fy")
+
+[node name="Player" parent="." instance=ExtResource("3_oomu2")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.829983, 0.557789, 0, -0.557789, 0.829983, -0.072998, 8.89664, 10.071)

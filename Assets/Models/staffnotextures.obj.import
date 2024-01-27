@@ -1,0 +1,22 @@
+[remap]
+
+importer="wavefront_obj"
+importer_version=1
+type="Mesh"
+uid="uid://hbn7av84wg3h"
+path="res://.godot/imported/staffnotextures.obj-b6a359bdd21b4ad7f58cab3c23ef5612.mesh"
+
+[deps]
+
+files=["res://.godot/imported/staffnotextures.obj-b6a359bdd21b4ad7f58cab3c23ef5612.mesh"]
+
+source_file="res://Assets/Models/staffnotextures.obj"
+dest_files=["res://.godot/imported/staffnotextures.obj-b6a359bdd21b4ad7f58cab3c23ef5612.mesh", "res://.godot/imported/staffnotextures.obj-b6a359bdd21b4ad7f58cab3c23ef5612.mesh"]
+
+[params]
+
+generate_tangents=true
+scale_mesh=Vector3(1, 1, 1)
+offset_mesh=Vector3(0, 0, 0)
+optimize_mesh=true
+force_disable_mesh_compression=false

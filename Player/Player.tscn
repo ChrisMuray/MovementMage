@@ -1,0 +1,74 @@
+[gd_scene load_steps=10 format=3 uid="uid://xj4im0umqm43"]
+
+[ext_resource type="Script" path="res://Player/Player.gd" id="1_dgsno"]
+[ext_resource type="PackedScene" uid="uid://bf85qk4ofe0a2" path="res://IceBlock/IceBlock.tscn" id="2_5soes"]
+[ext_resource type="Script" path="res://Player/Crosshair.gd" id="2_yypid"]
+[ext_resource type="PackedScene" uid="uid://ditllddlclp58" path="res://Fireball/Fireball.tscn" id="3_lujqw"]
+[ext_resource type="PackedScene" uid="uid://10fnp841kyh0" path="res://Repulsor/Repulsor.tscn" id="4_hgjck"]
+[ext_resource type="PackedScene" uid="uid://ckeoa2fi7ff3f" path="res://Player/Staff.tscn" id="5_d7anl"]
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_nppyd"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_46n6l"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_asw78"]
+size = Vector3(0.5, 0.2, 0.5)
+
+[node name="Player" type="CharacterBody3D"]
+floor_stop_on_slope = false
+floor_constant_speed = true
+script = ExtResource("1_dgsno")
+cam_sensitivity = 5.0
+iceblock_scene = ExtResource("2_5soes")
+fireball_scene = ExtResource("3_lujqw")
+repulsor_scene = ExtResource("4_hgjck")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+mesh = SubResource("CapsuleMesh_nppyd")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+shape = SubResource("CapsuleShape3D_46n6l")
+
+[node name="CameraPivot" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 0)
+
+[node name="FirstPersonCam" type="Camera3D" parent="CameraPivot"]
+current = true
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="CameraPivot/FirstPersonCam"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.4)
+visible = false
+mesh = SubResource("BoxMesh_asw78")
+
+[node name="FirstPersonRaycast" type="RayCast3D" parent="CameraPivot/FirstPersonCam"]
+target_position = Vector3(0, 0, -100)
+collide_with_areas = true
+
+[node name="Staff" parent="CameraPivot/FirstPersonCam" instance=ExtResource("5_d7anl")]
+transform = Transform3D(0.469846, -0.17101, 0, 0.168412, 0.462708, 0.0868241, -0.0296956, -0.0815879, 0.492404, 1, -0.7, -0.7)
+
+[node name="ThirdPersonCam" type="Camera3D" parent="CameraPivot"]
+transform = Transform3D(1, 0, 0, 0, 0.995396, 0.0958458, 0, -0.0958458, 0.995396, 0, 1, 3)
+
+[node name="ThirdPersonRaycast" type="RayCast3D" parent="CameraPivot/ThirdPersonCam"]
+transform = Transform3D(1, 0, 0, 0, 1, 5.96046e-08, 0, -5.96046e-08, 1, 0, 0, 0)
+target_position = Vector3(0, 0, -100)
+collide_with_areas = true
+
+[node name="CenterContainer" type="CenterContainer" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Crosshair" type="Control" parent="CenterContainer"]
+layout_mode = 2
+script = ExtResource("2_yypid")
+
+[node name="InfoLabel" type="Label" parent="."]
+offset_right = 40.0
+offset_bottom = 23.0
+text = "Hello, testing"
