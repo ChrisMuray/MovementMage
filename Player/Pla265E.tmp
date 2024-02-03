@@ -15,11 +15,6 @@
 size = Vector3(0.5, 0.2, 0.5)
 
 [sub_resource type="Curve3D" id="Curve3D_mlhq2"]
-_data = {
-"points": PackedVector3Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -5),
-"tilts": PackedFloat32Array(0, 0)
-}
-point_count = 2
 
 [node name="Player" type="CharacterBody3D"]
 floor_stop_on_slope = false
@@ -42,12 +37,11 @@ shape = SubResource("CapsuleShape3D_46n6l")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 0)
 
 [node name="Camera3D" type="Camera3D" parent="CameraPivot"]
-cull_mask = 1048573
 current = true
 
-[node name="Visor" type="MeshInstance3D" parent="CameraPivot/Camera3D"]
+[node name="MeshInstance3D" type="MeshInstance3D" parent="CameraPivot/Camera3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.4)
-layers = 2
+visible = false
 mesh = SubResource("BoxMesh_asw78")
 
 [node name="Raycast3D" type="RayCast3D" parent="CameraPivot/Camera3D"]
@@ -78,3 +72,5 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
 
 [node name="GrapplePath" type="Path3D" parent="CenterOfMass"]
 curve = SubResource("Curve3D_mlhq2")
+
+[node name="CSGPolygon3D" type="CSGPolygon3D" parent="CenterOfMass/GrapplePath"]

@@ -13,23 +13,15 @@ extends CharacterBody3D
 # Get the gravity from the project settings to be synced with RigidBody nodes.
 var gravity: float = ProjectSettings.get_setting("physics/3d/default_gravity")
 var mouse_motion := Vector2.ZERO
-var raycast: RayCast3D
-var cam: Camera3D
-var first_person := true:
-	set(val):
-		first_person = val
-		if val:
-			cam = first_person_cam
-			raycast = first_person_raycast
-		else:
-			cam = third_person_cam
-			raycast = third_person_raycast
-		cam.make_current()
 var crouching := false:
 	set(val):
 		crouching = val
 		scale.y = lerp(scale.y, 0.5, 0.5) if val else lerp(scale.y, 1.0, 0.5)
-var on_ice: bool
+var grappling := false:
+	set(val):
+		grappling = val
+		grapple_path.visible = val
+var on_ice := false
 var ice_num := 0:
 	set(val):
 		ice_num = val
@@ -37,31 +29,44 @@ var ice_num := 0:
 var repulsor_out := false
 
 @onready var camera_pivot: Node3D = $CameraPivot
-@onready var first_person_cam: Camera3D = $CameraPivot/FirstPersonCam
-@onready var third_person_cam: Camera3D = $CameraPivot/ThirdPersonCam
-@onready var first_person_raycast: RayCast3D = $CameraPivot/FirstPersonCam/FirstPersonRaycast
-@onready var third_person_raycast: RayCast3D = $CameraPivot/ThirdPersonCam/ThirdPersonRaycast
+@onready var cam: Camera3D = $CameraPivot/Camera3D
+@onready var raycast: RayCast3D = $CameraPivot/Camera3D/Raycast3D
+
 @onready var crosshair: Control = $CenterContainer/Crosshair
 @onready var info_label: Label = $InfoLabel
+@onready var center_of_mass: Node3D = $CenterOfMass
+@onready var grapple_path: Path3D = $CenterOfMass/GrapplePath
 
 func _ready() -> void:
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
-	cam = first_person_cam
-	raycast = first_person_raycast
+	
+	var grapple_curve = Curve3D.new()
+	grapple_curve.add_point(Vector3.ZERO)
+	grapple_curve.add_point(Vector3.ZERO)
+	grapple_path.curve = grapple_curve
+	var grapple_shape = CSGPolygon3D.new()
+	grapple_shape.polygon = PackedVector2Array([
+		Vector2(-0.1, -0.1),
+		Vector2(-0.1, 0.1),
+		Vector2(0.1, 0.1),
+		Vector2(0.1, -0.1)
+	])
+	grapple_shape.mode = CSGPolygon3D.MODE_PATH
+	grapple_shape.set_path_node(grapple_path.get_path())
+	grapple_path.add_child(grapple_shape)
 
 func _physics_process(delta: float) -> void:
 	
 	## DEBUG INFO
 	info_label.text = "FPS: " + str(1.0/delta) + \
 	"\nSPEED: " + str(snapped(get_real_velocity().length(), 0.01)) + \
-	"\nOn Ice: " + str(on_ice)
+	"\nOn Ice: " + str(on_ice) + \
+	"\nOn Wall: " + str(is_on_wall_only())
 	
 	## CAMERA
 	if Input.mouse_mode == Input.MOUSE_MODE_CAPTURED:
 		handle_camera_rotation()
 	
-	if Input.is_action_just_pressed("switch_cam"):
-		first_person = not first_person
 	
 	## MOVEMENT
 	# Add the gravity.
@@ -81,7 +86,6 @@ func _physics_process(delta: float) -> void:
 	# Get the input direction and handle the movement/deceleration.
 	var input_dir := Input.get_vector("move_left", "move_right", "move_forward", "move_back")
 	var direction := (transform.basis * Vector3(input_dir.x, 0, input_dir.y)).normalized()
-	
 	var current_speed = get_real_velocity().length()
 	
 	if on_ice:
@@ -107,6 +111,12 @@ func _physics_process(delta: float) -> void:
 	
 	if Input.is_action_just_pressed("repulse"):
 		handle_repulsor()
+	
+	if Input.is_action_pressed("grapple"):
+		grappling = true
+		grapple()
+	else:
+		grappling = false
 	
 	move_and_slide()
 
@@ -137,11 +147,6 @@ func place_ice() -> void:
 	#Needed for proper rotation
 	var up = Vector3.RIGHT if normal == Vector3.UP else Vector3.UP
 	
-	## Normal line for debugging
-	#var line_start = camera.unproject_position(point)
-	#var line_end = camera.unproject_position(point + normal)
-	#crosshair.set_norm_line([line_start, line_end])
-	
 	var new_iceblock = iceblock_scene.instantiate()
 	new_iceblock.position = local_point
 	if crouching:
@@ -169,3 +174,12 @@ func handle_repulsor() -> void:
 				velocity += c.explode_force * c.force_curve.sample(distance / c.explode_radius) * launch_direction
 				c.queue_free()
 		repulsor_out = false
+
+func grapple() -> void:
+	if not raycast.is_colliding():
+		return
+	
+	grapple_path.curve.set_point_position(0, center_of_mass.to_local(Vector3.ZERO))
+	grapple_path.curve.set_point_position(1, center_of_mass.to_local(raycast.get_collision_point()))
+	for i in range(grapple_path.curve.point_count):
+		print(grapple_path.curve.get_point_position(i))
