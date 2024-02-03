@@ -10,6 +10,12 @@ extends CharacterBody3D
 @export var repulsor_scene: PackedScene
 @export var fireball_speed := 10.0
 
+@export var air_control := 0.2
+@export var air_control_directionality := 1.3
+@export var max_air_speed := 5
+
+@export var double_jump_count := 1
+
 # Get the gravity from the project settings to be synced with RigidBody nodes.
 var gravity: float = ProjectSettings.get_setting("physics/3d/default_gravity")
 var mouse_motion := Vector2.ZERO
@@ -27,6 +33,8 @@ var ice_num := 0:
 		ice_num = val
 		on_ice = ice_num > 0
 var repulsor_out := false
+
+var double_jumps_left := 0
 
 @onready var camera_pivot: Node3D = $CameraPivot
 @onready var cam: Camera3D = $CameraPivot/Camera3D
@@ -76,10 +84,16 @@ func _physics_process(delta: float) -> void:
 		else:
 			velocity.y -= gravity * delta * fall_multiplier # faster fall downward for snappier feel
 	
+		
 	# Handle jump.
-	if Input.is_action_just_pressed("jump") and is_on_floor():
-		velocity.y = sqrt(jump_height * 2 * gravity)
-	
+	if Input.is_action_just_pressed("jump"):
+		if is_on_floor():
+			velocity.y = sqrt(jump_height * 2 * gravity)
+			double_jumps_left = double_jump_count
+		elif double_jumps_left > 0 and velocity.y < 10:
+			velocity.y = 1.5 * sqrt(jump_height * 2 * gravity)
+			double_jumps_left -= 1
+			
 	# Crouching
 	crouching = Input.is_action_pressed("crouch")
 	
@@ -93,12 +107,30 @@ func _physics_process(delta: float) -> void:
 	else:
 		current_speed = lerp(current_speed, speed, 0.1)
 	
-	if direction:
-		velocity.x = direction.x * current_speed
-		velocity.z = direction.z * current_speed
+	if is_on_floor():
+		if direction:
+			velocity.x = direction.x * 6
+			velocity.z = direction.z * 6
+		else:
+			velocity.x = 0
+			velocity.z = 0
 	else:
-		velocity.x = 0
-		velocity.z = 0
+		if direction:
+			var hv := Vector3(velocity.x, 0, velocity.z)
+			
+			# 0 when input dir is in same dir as current horizontal velocity,
+			# and 1 when in opposite direction.
+			var val := .5*(1-hv.normalized().dot(direction.normalized()))
+			
+			var old_max_xz_speed = hv.length()
+			hv = hv + direction * air_control * (1 + air_control_directionality * val)
+			hv = hv.limit_length(max(old_max_xz_speed, max_air_speed))
+			
+			velocity.x = hv.x
+			velocity.z = hv.z
+			
+			
+
 	
 	## ABILITIES
 	if Input.is_action_just_pressed("fireball"):
