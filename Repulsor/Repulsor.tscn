@@ -33,6 +33,7 @@ top_level = true
 collision_layer = 0
 script = ExtResource("1_6qdws")
 speed_curve = SubResource("Curve_5xqxi")
+explode_force = 10.0
 force_curve = SubResource("Curve_ugjp6")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]

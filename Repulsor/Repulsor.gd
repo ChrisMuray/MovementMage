@@ -1,5 +1,4 @@
-extends CharacterBody3D
-class_name Repulsor
+class_name Repulsor extends CharacterBody3D
 
 @export var shoot_time := 2.0
 @export var starting_speed := 500.0

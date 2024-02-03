@@ -46,10 +46,10 @@ func _ready() -> void:
 	grapple_path.curve = grapple_curve
 	var grapple_shape = CSGPolygon3D.new()
 	grapple_shape.polygon = PackedVector2Array([
-		Vector2(-0.1, -0.1),
-		Vector2(-0.1, 0.1),
-		Vector2(0.1, 0.1),
-		Vector2(0.1, -0.1)
+		Vector2(-0.05, -0.05),
+		Vector2(-0.05, 0.05),
+		Vector2(0.05, 0.05),
+		Vector2(0.05, -0.05)
 	])
 	grapple_shape.mode = CSGPolygon3D.MODE_PATH
 	grapple_shape.set_path_node(grapple_path.get_path())
@@ -179,7 +179,8 @@ func grapple() -> void:
 	if not raycast.is_colliding():
 		return
 	
+	var global_point = center_of_mass.to_local(raycast.get_collision_point())
 	grapple_path.curve.set_point_position(0, center_of_mass.to_local(Vector3.ZERO))
-	grapple_path.curve.set_point_position(1, center_of_mass.to_local(raycast.get_collision_point()))
+	grapple_path.curve.set_point_position(1, center_of_mass.to_local(global_point))
 	for i in range(grapple_path.curve.point_count):
 		print(grapple_path.curve.get_point_position(i))
