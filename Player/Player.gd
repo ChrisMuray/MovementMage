@@ -128,10 +128,7 @@ func _physics_process(delta: float) -> void:
 			
 			velocity.x = hv.x
 			velocity.z = hv.z
-			
-			
 
-	
 	## ABILITIES
 	if Input.is_action_just_pressed("fireball"):
 		shoot(fireball_scene)

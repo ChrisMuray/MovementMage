@@ -1,9 +1,8 @@
 [gd_scene load_steps=2 format=3 uid="uid://ckeoa2fi7ff3f"]
 
-[ext_resource type="ArrayMesh" uid="uid://hbn7av84wg3h" path="res://Assets/Models/staffnotextures.obj" id="1_8fbsx"]
+[ext_resource type="PackedScene" uid="uid://bih45lj5yg1ha" path="res://Assets/Models/StaffTest.glb" id="1_47v03"]
 
 [node name="Staff" type="Node3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.293667, -0.124586)
 
-[node name="Staffnotextures" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.437522, -2.87059, -2.49548)
-mesh = ExtResource("1_8fbsx")
+[node name="StaffTest" parent="." instance=ExtResource("1_47v03")]
