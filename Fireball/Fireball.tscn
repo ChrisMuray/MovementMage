@@ -18,7 +18,6 @@ radius = 0.3
 [node name="Fireball" type="Area3D"]
 top_level = true
 script = ExtResource("1_crxh2")
-speed = 50.0
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
 material_override = SubResource("StandardMaterial3D_uajj5")

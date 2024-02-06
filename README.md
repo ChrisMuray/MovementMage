@@ -2,10 +2,14 @@
 That was no mana potion - it was a bottle of Powerfully Potent Poison!!! Help the mage navigate back to his alchemical laboratory before his time in this realm is cut short!
 
 ## Controls (so far)
-Fireball - left click
+Move - WASD
 
-Ice Path - right click
+Crouch - CTRL
 
-Repulsor - R
+Grapple - Left Click
 
-Crouch - control
+Ice Path - Right Click
+
+Fireball - F
+
+Repulsor - R to lauch, R again to explode

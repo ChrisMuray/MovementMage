@@ -14,7 +14,7 @@ var movin := true
 var angular_velocity: Vector3
 
 @onready var mesh: MeshInstance3D = $MeshInstance3D
-@onready var player := get_parent()
+@onready var spawn_velocity: Vector3 = get_parent().get_real_velocity() 
 
 func _ready() -> void:
 	angular_velocity = rotation_speed * Vector3(randf(), randf(), randf()).normalized()
@@ -22,8 +22,10 @@ func _ready() -> void:
 func _physics_process(delta: float) -> void:
 	if movin:
 		var progress = t / shoot_time
-		velocity = delta * direction * starting_speed * speed_curve.sample(progress)
+		velocity = delta * speed_curve.sample(progress) * direction * starting_speed + 50.0 * delta * spawn_velocity
 		t += delta
 		movin = t <= shoot_time
+	else:
+		velocity = Vector3.ZERO
 	mesh.rotation += delta * angular_velocity
 	move_and_slide()
