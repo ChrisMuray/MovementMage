@@ -1,0 +1,115 @@
+[gd_scene load_steps=12 format=3 uid="uid://xj4im0umqm43"]
+
+[ext_resource type="Script" path="res://Player/Player.gd" id="1_dgsno"]
+[ext_resource type="PackedScene" uid="uid://bf85qk4ofe0a2" path="res://IceBlock/IceBlock.tscn" id="2_5soes"]
+[ext_resource type="Script" path="res://Player/Crosshair.gd" id="2_yypid"]
+[ext_resource type="PackedScene" uid="uid://ditllddlclp58" path="res://Fireball/Fireball.tscn" id="3_lujqw"]
+[ext_resource type="PackedScene" uid="uid://10fnp841kyh0" path="res://Repulsor/Repulsor.tscn" id="4_hgjck"]
+[ext_resource type="PackedScene" uid="uid://ckeoa2fi7ff3f" path="res://Player/Staff.tscn" id="5_d7anl"]
+[ext_resource type="PackedScene" uid="uid://cs5roo6w80cj2" path="res://Assets/Models/TestMage.glb" id="6_c33f7"]
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_nppyd"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_46n6l"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_asw78"]
+size = Vector3(0.5, 0.2, 0.5)
+
+[sub_resource type="Curve3D" id="Curve3D_mlhq2"]
+_data = {
+"points": PackedVector3Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -5),
+"tilts": PackedFloat32Array(0, 0)
+}
+point_count = 2
+
+[node name="Player" type="CharacterBody3D"]
+floor_stop_on_slope = false
+floor_constant_speed = true
+script = ExtResource("1_dgsno")
+cam_sensitivity = 5.0
+iceblock_scene = ExtResource("2_5soes")
+fireball_scene = ExtResource("3_lujqw")
+repulsor_scene = ExtResource("4_hgjck")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+mesh = SubResource("CapsuleMesh_nppyd")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+shape = SubResource("CapsuleShape3D_46n6l")
+
+[node name="CameraPivot" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 0)
+
+[node name="Camera3D" type="Camera3D" parent="CameraPivot"]
+cull_mask = 1048573
+current = true
+
+[node name="Visor" type="MeshInstance3D" parent="CameraPivot/Camera3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.4)
+layers = 2
+mesh = SubResource("BoxMesh_asw78")
+
+[node name="Raycast3D" type="RayCast3D" parent="CameraPivot/Camera3D"]
+target_position = Vector3(0, 0, -100)
+collide_with_areas = true
+
+[node name="Staff" parent="CameraPivot/Camera3D" instance=ExtResource("5_d7anl")]
+transform = Transform3D(-0.497637, -0.047917, -0.0078537, -0.0479229, 0.497698, 0, 0.00781755, 0.000752744, -0.499938, 0.896, -1.011, -0.987)
+
+[node name="TestMage" parent="CameraPivot/Camera3D" instance=ExtResource("6_c33f7")]
+transform = Transform3D(-0.5, 0, 4.37114e-08, 0, 0.5, 0, -4.37114e-08, 0, -0.5, 0, -0.766, -0.141)
+
+[node name="BoneRot" parent="CameraPivot/Camera3D/TestMage" index="0"]
+transform = Transform3D(1, 0, -5.86198e-14, 0, 1, 0, -1.77636e-15, 0, 1, 8.52651e-14, -8.9407e-08, -3)
+
+[node name="Skeleton3D" parent="CameraPivot/Camera3D/TestMage/Armature" index="0"]
+bones/1/rotation = Quaternion(-0.0345761, 0.0175281, 0.963638, -0.264384)
+bones/24/rotation = Quaternion(0.0759629, 0.38101, 0.902421, 0.186273)
+bones/25/rotation = Quaternion(0.360833, -0.0417814, 0.177004, 0.914726)
+bones/26/rotation = Quaternion(0.0532888, -0.00533679, -0.0912217, 0.994389)
+bones/28/rotation = Quaternion(0.621708, 0.0249173, -0.0886541, 0.777816)
+bones/29/rotation = Quaternion(0.646064, 0.089717, 0.0427959, 0.756783)
+bones/30/rotation = Quaternion(0.653817, 0.080149, -0.00609807, 0.752371)
+bones/31/rotation = Quaternion(-0.366786, -0.647314, -0.370343, 0.556146)
+bones/32/rotation = Quaternion(0.085221, -0.035419, -0.0311647, 0.995245)
+bones/35/rotation = Quaternion(0.588128, -0.0055949, -0.122792, 0.799372)
+bones/36/rotation = Quaternion(0.657186, 0.0866032, -0.0302403, 0.748126)
+bones/37/rotation = Quaternion(0.609989, 0.0554385, -0.00144077, 0.790467)
+bones/39/rotation = Quaternion(0.641055, -0.00134949, -0.134857, 0.755553)
+bones/40/rotation = Quaternion(0.623824, 0.055507, -0.00330927, 0.779585)
+bones/41/rotation = Quaternion(0.679014, 0.109468, 0.00337387, 0.72591)
+bones/43/rotation = Quaternion(0.630519, 0.0409763, -0.0379682, 0.774161)
+bones/44/rotation = Quaternion(0.636749, 0.0220574, 0.015041, 0.770609)
+bones/45/rotation = Quaternion(0.595433, 0.0129469, -0.00476231, 0.803286)
+bones/46/rotation = Quaternion(0.488862, -0.513462, 0.414835, 0.570335)
+bones/50/position = Vector3(-0.731782, 0.539549, 1.55061)
+bones/50/rotation = Quaternion(0.0739177, 0.246368, 0.96617, 0.0188486)
+
+[node name="AnimationPlayer" parent="CameraPivot/Camera3D/TestMage" index="3"]
+speed_scale = 6.0
+
+[node name="CenterContainer" type="CenterContainer" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Crosshair" type="Control" parent="CenterContainer"]
+layout_mode = 2
+script = ExtResource("2_yypid")
+
+[node name="InfoLabel" type="Label" parent="."]
+offset_right = 40.0
+offset_bottom = 23.0
+text = "Hello, testing"
+
+[node name="CenterOfMass" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+
+[node name="GrapplePath" type="Path3D" parent="CenterOfMass"]
+curve = SubResource("Curve3D_mlhq2")
+
+[editable path="CameraPivot/Camera3D/TestMage"]
