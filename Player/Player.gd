@@ -60,6 +60,7 @@ func _ready() -> void:
 		Vector2(0.05, -0.05)
 	])
 	grapple_shape.mode = CSGPolygon3D.MODE_PATH
+	grapple_shape.path_local = true
 	grapple_shape.set_path_node(grapple_path.get_path())
 	grapple_path.add_child(grapple_shape)
 
@@ -206,10 +207,8 @@ func handle_repulsor() -> void:
 
 func grapple() -> void:
 	if not raycast.is_colliding():
+		grapple_path.curve.set_point_position(1, Vector3.ZERO)
 		return
 	
-	var global_point = center_of_mass.to_local(raycast.get_collision_point())
-	grapple_path.curve.set_point_position(0, center_of_mass.to_local(Vector3.ZERO))
-	grapple_path.curve.set_point_position(1, center_of_mass.to_local(global_point))
-	for i in range(grapple_path.curve.point_count):
-		print(grapple_path.curve.get_point_position(i))
+	grapple_path.curve.set_point_position(0, Vector3.ZERO)
+	grapple_path.curve.set_point_position(1, grapple_path.to_local(raycast.get_collision_point()))
