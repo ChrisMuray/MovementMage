@@ -76,6 +76,7 @@ func _ready() -> void:
 		Vector2(0.05, -0.05)
 	])
 	grapple_shape.mode = CSGPolygon3D.MODE_PATH
+	grapple_shape.path_local = true
 	grapple_shape.set_path_node(grapple_path.get_path())
 	grapple_path.add_child(grapple_shape)
 
@@ -241,6 +242,6 @@ func start_grapple() -> void:
 	grapple()
 
 func grapple() -> void:
-	grapple_path.curve.set_point_position(0, grapple_path.to_local(Vector3.ZERO))
-	grapple_path.curve.set_point_position(1, grapple_path.to_local(grapple_path.to_local(grapple_point)))
+	grapple_path.curve.set_point_position(0, Vector3.ZERO)
+	grapple_path.curve.set_point_position(1, grapple_path.to_local(grapple_point))
 	velocity += (grapple_point - global_position).normalized() * grapple_force
