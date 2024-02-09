@@ -1,0 +1,85 @@
+[gd_scene load_steps=9 format=3 uid="uid://vyws3rynag82"]
+
+[ext_resource type="FontFile" uid="uid://dfksu5vreti5x" path="res://Assets/Fonts/MedievalSharp-Regular.ttf" id="1_3ufor"]
+[ext_resource type="Script" path="res://UI/StartMenu.gd" id="1_bagrt"]
+[ext_resource type="Shader" path="res://UI/Blur.gdshader" id="2_eipku"]
+[ext_resource type="AudioStream" uid="uid://b5eap6xvnr6ya" path="res://Assets/Audio/the_movement_mage_MIDI.mp3" id="4_i6gdc"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_hue6c"]
+shader = ExtResource("2_eipku")
+shader_parameter/lod = 2.5
+
+[sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_5v4r2"]
+
+[sub_resource type="Theme" id="Theme_7prgh"]
+default_font = ExtResource("1_3ufor")
+default_font_size = 0
+
+[sub_resource type="LabelSettings" id="LabelSettings_2iqd0"]
+font_size = 64
+outline_size = 16
+outline_color = Color(0, 0, 0, 1)
+
+[node name="StartMenu" type="Control"]
+process_mode = 3
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_bagrt")
+
+[node name="BlurTextureRect" type="TextureRect" parent="."]
+material = SubResource("ShaderMaterial_hue6c")
+custom_minimum_size = Vector2(100, 100)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = SubResource("PlaceholderTexture2D_5v4r2")
+
+[node name="CenterContainer" type="CenterContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="ColorRect" type="Panel" parent="CenterContainer"]
+custom_minimum_size = Vector2(600, 200)
+layout_mode = 2
+
+[node name="CenterContainer" type="CenterContainer" parent="CenterContainer/ColorRect"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CenterContainer/ColorRect/CenterContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="CenterContainer/ColorRect/CenterContainer/VBoxContainer"]
+layout_mode = 2
+theme = SubResource("Theme_7prgh")
+text = "MOVEMENT MAGE"
+label_settings = SubResource("LabelSettings_2iqd0")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="CenterContainer/ColorRect/CenterContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="StartButton" type="Button" parent="CenterContainer/ColorRect/CenterContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Start"
+
+[node name="StartMenuMusic" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("4_i6gdc")
+
+[connection signal="pressed" from="CenterContainer/ColorRect/CenterContainer/VBoxContainer/HBoxContainer/StartButton" to="." method="_on_start_button_pressed"]

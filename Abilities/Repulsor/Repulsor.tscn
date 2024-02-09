@@ -1,0 +1,51 @@
+[gd_scene load_steps=9 format=3 uid="uid://10fnp841kyh0"]
+
+[ext_resource type="Script" path="res://Abilities/Repulsor/Repulsor.gd" id="1_6qdws"]
+
+[sub_resource type="Curve" id="Curve_5xqxi"]
+_data = [Vector2(0, 1), 0.0, -2.23285, 0, 1, Vector2(0.369427, 0.175127), -0.505386, -0.505386, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="Curve" id="Curve_ugjp6"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(0.248408, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_jlyue"]
+albedo_color = Color(0.639216, 0, 1, 1)
+emission_enabled = true
+emission = Color(0.639216, 0, 1, 1)
+emission_energy_multiplier = 10.0
+
+[sub_resource type="SphereMesh" id="SphereMesh_y8h0g"]
+radial_segments = 4
+rings = 1
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_3a4rm"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_8232a"]
+transparency = 1
+albedo_color = Color(0.639216, 0, 1, 0.341176)
+
+[sub_resource type="SphereMesh" id="SphereMesh_ikf1n"]
+
+[node name="Repulsor" type="CharacterBody3D"]
+top_level = true
+collision_layer = 0
+script = ExtResource("1_6qdws")
+speed_curve = SubResource("Curve_5xqxi")
+explode_force = 10.0
+force_curve = SubResource("Curve_ugjp6")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, 0, 0)
+material_override = SubResource("StandardMaterial3D_jlyue")
+mesh = SubResource("SphereMesh_y8h0g")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, 0, 0)
+shape = SubResource("SphereShape3D_3a4rm")
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, 0, 0)
+material_override = SubResource("StandardMaterial3D_8232a")
+mesh = SubResource("SphereMesh_ikf1n")

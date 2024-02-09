@@ -50,35 +50,16 @@ var double_jumps_left := 0
 @onready var camera_pivot: Node3D = $CameraPivot
 @onready var cam: Camera3D = $CameraPivot/Camera3D
 @onready var third_person_cam: Camera3D = $CameraPivot/Camera3D/ThirdPersonCam
-@onready var front_view_cam: Camera3D = $CameraPivot/Camera3D/FrontViewCam
 @onready var raycast: RayCast3D = $CameraPivot/Camera3D/Raycast3D
-@onready var crosshair: Control = $CenterContainer/Crosshair
 @onready var info_label: Label = $InfoLabel
 @onready var center_of_mass: Node3D = $CenterOfMass
 @onready var grapple_path: Path3D = $CenterOfMass/GrapplePath
 @onready var arms_animation_player: AnimationPlayer = $CameraPivot/Camera3D/Arms/ArmsAnimationPlayer
 
 func _ready() -> void:
-	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
-	
-	# Curve to draw grapple line
-	var grapple_curve = Curve3D.new()
-	grapple_curve.add_point(Vector3.ZERO)
-	grapple_curve.add_point(Vector3.ZERO)
-	grapple_path.curve = grapple_curve
-	
-	# Placeholder grapple hook
-	var grapple_shape = CSGPolygon3D.new()
-	grapple_shape.polygon = PackedVector2Array([
-		Vector2(-0.05, -0.05),
-		Vector2(-0.05, 0.05),
-		Vector2(0.05, 0.05),
-		Vector2(0.05, -0.05)
-	])
-	grapple_shape.mode = CSGPolygon3D.MODE_PATH
-	grapple_shape.path_local = true
-	grapple_shape.set_path_node(grapple_path.get_path())
-	grapple_path.add_child(grapple_shape)
+	initialize_grapple_hook()
+	if Global.checkpoint_positions:
+		global_position = Global.checkpoint_positions[-1]
 
 func _physics_process(delta: float) -> void:
 	## DEBUG INFO
@@ -97,17 +78,9 @@ func _physics_process(delta: float) -> void:
 		
 	var current_speed = get_real_velocity().length()
 	var target_fov = min(fov_limits.x + max(current_speed - walking_speed, 0) * (fov_limits.y-fov_limits.x)/(max_air_speed - walking_speed), fov_limits.y)
-	cam.fov = lerp(cam.fov, target_fov, 0.01)
+	cam.fov = lerp(cam.fov, target_fov, 0.1)
 	
 	## MOVEMENT
-	# Handle jump.
-	if Input.is_action_just_pressed("jump"):
-		if is_on_floor():
-			velocity.y = sqrt(jump_height * 2 * gravity)
-			double_jumps_left = double_jump_count
-		elif double_jumps_left > 0:
-			velocity.y = 1.5 * sqrt(jump_height * 2 * gravity)
-			double_jumps_left -= 1
 	
 	# Crouching
 	crouching = Input.is_action_pressed("crouch")
@@ -121,15 +94,15 @@ func _physics_process(delta: float) -> void:
 	if is_on_floor(): # Ground movement logic
 		var target_speed = walking_speed if direction else 0.0
 		var target_velocity = target_speed * Vector3(direction.x, 0, direction.z)
-		velocity.x = move_toward(velocity.x, target_velocity.x, 0.5)
-		velocity.z = move_toward(velocity.z, target_velocity.z, 0.5)
+		velocity.x = move_toward(velocity.x, target_velocity.x, 0.75)
+		velocity.z = move_toward(velocity.z, target_velocity.z, 0.75)
 		if on_ice:
 			var vel = get_real_velocity()
-			var ice_speed_multiplier = get_ice_speed_multiplier(vel, direction)
-			velocity.x = ice_speed_multiplier * vel.x
-			velocity.z = ice_speed_multiplier * vel.z
+			var ice_speed_multiplier = 1.0 + 0.01 * direction.normalized().dot(vel.normalized())
+			velocity = ice_speed_multiplier * vel
+			# So player doesn't get stuck in the middle of ice
 			if vel == Vector3.ZERO:
-				velocity = 1.0 * direction
+				velocity = direction
 		# Cap ground speed
 		velocity = velocity.limit_length(max_ground_speed)
 	
@@ -150,6 +123,15 @@ func _physics_process(delta: float) -> void:
 		# Cap air speed
 		velocity = velocity.limit_length(max_air_speed)
 	
+	# Handle jump.
+	if is_on_floor():
+		if Input.is_action_pressed("jump"):
+			velocity.y = sqrt(jump_height * 2 * gravity)
+			double_jumps_left = double_jump_count
+	elif double_jumps_left > 0 and Input.is_action_just_pressed("jump"):
+		velocity.y = 1.5 * sqrt(jump_height * 2 * gravity)
+		double_jumps_left -= 1
+	
 	## ABILITIES
 	if Input.is_action_just_pressed("fireball"):
 		shoot(fireball_scene)
@@ -168,22 +150,21 @@ func _physics_process(delta: float) -> void:
 			grappling = true
 		elif grappling:
 			grapple()
+	
 	if Input.is_action_just_released("grapple"):
 		grappling = false
 	
 	if Input.is_action_just_pressed("thumbs_up"):
 		arms_animation_player.play("ThumbsUp")
 	
+	if Input.is_action_just_pressed("die"):
+		die()
+	
 	move_and_slide()
 
 func _input(event: InputEvent) -> void:
 	if event is InputEventMouseMotion:
 		mouse_motion = -event.relative * 0.001
-	if event.is_action_pressed("ui_cancel"):
-		if Input.mouse_mode == Input.MOUSE_MODE_CAPTURED:
-			Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
-		else:
-			Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 
 func handle_camera_rotation() ->void:
 	rotate_y(mouse_motion.x * cam_sensitivity)
@@ -208,17 +189,11 @@ func place_ice() -> void:
 	add_child(new_iceblock)
 	new_iceblock.look_at(point+normal, up)
 
-func get_ice_speed_multiplier(vel: Vector3, direction: Vector3) -> float:
-	if direction.dot(vel) > 0:
-		return 1.01
-	elif direction.dot(vel) < 0:
-		return 0.99
-	else:
-		return 1.0
-
 func shoot(scene: PackedScene) -> void:
 	var proj = scene.instantiate()
 	var dir = -cam.global_basis.z
+	if crouching:
+		proj.scale.y = 2
 	add_child(proj)
 	proj.global_position = cam.global_position + dir
 	proj.direction = dir
@@ -237,6 +212,26 @@ func handle_repulsor() -> void:
 				c.queue_free()
 		repulsor_out = false
 
+func initialize_grapple_hook() -> void:
+	# Curve to draw grapple line
+	var grapple_curve = Curve3D.new()
+	grapple_curve.add_point(Vector3.ZERO)
+	grapple_curve.add_point(Vector3.ZERO)
+	grapple_path.curve = grapple_curve
+	
+	# Placeholder grapple hook
+	var grapple_shape = CSGPolygon3D.new()
+	grapple_shape.polygon = PackedVector2Array([
+		Vector2(-0.05, -0.05),
+		Vector2(-0.05, 0.05),
+		Vector2(0.05, 0.05),
+		Vector2(0.05, -0.05)
+	])
+	grapple_shape.mode = CSGPolygon3D.MODE_PATH
+	grapple_shape.path_local = true
+	grapple_shape.set_path_node(grapple_path.get_path())
+	grapple_path.add_child(grapple_shape)
+
 func start_grapple() -> void:
 	grapple_point = raycast.get_collision_point()
 	grapple()
@@ -245,3 +240,7 @@ func grapple() -> void:
 	grapple_path.curve.set_point_position(0, Vector3.ZERO)
 	grapple_path.curve.set_point_position(1, grapple_path.to_local(grapple_point))
 	velocity += (grapple_point - global_position).normalized() * grapple_force
+
+func die() -> void:
+	Global.first_load = false
+	get_tree().reload_current_scene()

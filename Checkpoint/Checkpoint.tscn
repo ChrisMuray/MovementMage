@@ -1,0 +1,27 @@
+[gd_scene load_steps=5 format=3 uid="uid://11evrbotevy7"]
+
+[ext_resource type="Script" path="res://Checkpoint/Checkpoint.gd" id="1_37lvu"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_vqcg0"]
+transparency = 1
+albedo_color = Color(1, 1, 0.216, 0.25)
+
+[sub_resource type="SphereMesh" id="SphereMesh_8duiq"]
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_6531i"]
+
+[node name="Checkpoint" type="Area3D"]
+collision_layer = 8
+script = ExtResource("1_37lvu")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+material_override = SubResource("StandardMaterial3D_vqcg0")
+ignore_occlusion_culling = true
+mesh = SubResource("SphereMesh_8duiq")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+shape = SubResource("SphereShape3D_6531i")
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]

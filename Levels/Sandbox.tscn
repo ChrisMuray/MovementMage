@@ -1,13 +1,18 @@
-[gd_scene load_steps=9 format=3 uid="uid://hfd6aam6qf82"]
+[gd_scene load_steps=14 format=3 uid="uid://hfd6aam6qf82"]
 
-[ext_resource type="Texture2D" uid="uid://t8pgk85mr6tj" path="res://Assets/kenney_prototype-textures/Vector/texture_02.svg" id="1_l2n5c"]
+[ext_resource type="Texture2D" uid="uid://mebohubes5gy" path="res://Assets/kenney_prototype-textures/PNG/Dark/texture_01.png" id="1_qrte1"]
+[ext_resource type="Texture2D" uid="uid://cpcfu2wrutxju" path="res://Assets/AllSkyFree_Skyboxes/Epic_BlueSunset_EquiRect_flat.png" id="1_y53yd"]
+[ext_resource type="Material" uid="uid://4iu8bel5fm45" path="res://Assets/Materials/SandboxBlock.tres" id="2_2lqfv"]
 [ext_resource type="Material" uid="uid://dxyg365ffw3cb" path="res://Assets/Materials/StoneMaterial.tres" id="2_3p5fy"]
 [ext_resource type="PackedScene" uid="uid://xj4im0umqm43" path="res://Player/Player.tscn" id="3_oomu2"]
+[ext_resource type="PackedScene" uid="uid://desdlvedi7xdk" path="res://Sign/Sign.tscn" id="4_nj5mg"]
+[ext_resource type="PackedScene" uid="uid://11evrbotevy7" path="res://Checkpoint/Checkpoint.tscn" id="6_avy1i"]
 
-[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_rvrnh"]
+[sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_hltt3"]
+panorama = ExtResource("1_y53yd")
 
 [sub_resource type="Sky" id="Sky_1a5f7"]
-sky_material = SubResource("ProceduralSkyMaterial_rvrnh")
+sky_material = SubResource("PanoramaSkyMaterial_hltt3")
 
 [sub_resource type="Environment" id="Environment_viek2"]
 background_mode = 2
@@ -15,12 +20,17 @@ sky = SubResource("Sky_1a5f7")
 tonemap_mode = 2
 glow_enabled = true
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_2tojc"]
-albedo_texture = ExtResource("1_l2n5c")
-uv1_scale = Vector3(200, 200, 200)
+[sub_resource type="BoxShape3D" id="BoxShape3D_dhfbf"]
+size = Vector3(200, 1, 200)
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_twxhu"]
-albedo_color = Color(0.298039, 0.298039, 0.298039, 1)
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ucw30"]
+albedo_texture = ExtResource("1_qrte1")
+uv1_triplanar = true
+uv1_world_triplanar = true
+
+[sub_resource type="BoxMesh" id="BoxMesh_p6t8c"]
+lightmap_size_hint = Vector2i(14, 21)
+size = Vector3(200, 1, 200)
 
 [node name="Sandbox" type="Node3D"]
 
@@ -28,93 +38,122 @@ albedo_color = Color(0.298039, 0.298039, 0.298039, 1)
 environment = SubResource("Environment_viek2")
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
-transform = Transform3D(-0.866025, -0.433013, 0.25, 0, 0.5, 0.866025, -0.5, 0.75, -0.433013, 0, 0, 0)
+transform = Transform3D(1, 0, 0, 0, 0.984808, 0.173648, 0, -0.173648, 0.984808, 0, 0, 0)
 shadow_enabled = true
 
-[node name="Floor" type="CSGBox3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 53.3417, 0, 38.6995)
-material_override = SubResource("StandardMaterial3D_2tojc")
-use_collision = true
-size = Vector3(200, 1, 200)
-material = SubResource("StandardMaterial3D_twxhu")
+[node name="Floor" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
 
-[node name="Walls" type="Node3D" parent="."]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Floor"]
+shape = SubResource("BoxShape3D_dhfbf")
 
-[node name="Wall" type="CSGBox3D" parent="Walls"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 53.3417, 2.5, -60.8005)
-material_override = SubResource("StandardMaterial3D_2tojc")
-use_collision = true
-size = Vector3(200, 4, 1)
-material = SubResource("StandardMaterial3D_twxhu")
-
-[node name="Wall2" type="CSGBox3D" parent="Walls"]
-transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 152.828, 2.5, 38.9271)
-material_override = SubResource("StandardMaterial3D_2tojc")
-use_collision = true
-size = Vector3(199.455, 4, 1)
-material = SubResource("StandardMaterial3D_twxhu")
-
-[node name="Wall3" type="CSGBox3D" parent="Walls"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 53.3417, 2.5, 138.199)
-material_override = SubResource("StandardMaterial3D_2tojc")
-use_collision = true
-size = Vector3(200, 4, 1)
-material = SubResource("StandardMaterial3D_twxhu")
-
-[node name="Wall4" type="CSGBox3D" parent="Walls"]
-transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -46.1592, 2.5, 38.9271)
-material_override = SubResource("StandardMaterial3D_2tojc")
-use_collision = true
-size = Vector3(199.455, 4, 1)
-material = SubResource("StandardMaterial3D_twxhu")
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Floor"]
+material_override = SubResource("StandardMaterial3D_ucw30")
+mesh = SubResource("BoxMesh_p6t8c")
 
 [node name="Blocks" type="Node3D" parent="."]
 
 [node name="Block" type="CSGBox3D" parent="Blocks"]
-transform = Transform3D(0.5, 0, -0.866025, 0, 1, 0, 0.866025, 0, 0.5, 71.25, 8, -11.159)
+transform = Transform3D(-0.02677, 0, -0.999641, 0, 1, 0, 0.999641, 0, -0.02677, 59.3293, 19.6494, -14.2566)
+material_override = ExtResource("2_2lqfv")
 use_collision = true
-size = Vector3(15, 15, 5)
+size = Vector3(15, 39.2988, 5)
 material = ExtResource("2_3p5fy")
 
 [node name="Block4" type="CSGBox3D" parent="Blocks"]
-transform = Transform3D(0.840576, 0, -0.541694, 0, 1, 0, 0.541694, 0, 0.840576, 28.5859, 4.98642, 37.879)
+transform = Transform3D(0.840576, 0, -0.541694, 0, 1, 0, 0.541694, 0, 0.840576, 23.596, 4.48642, 36.5866)
+material_override = ExtResource("2_2lqfv")
 use_collision = true
 size = Vector3(10, 8.97284, 17.9951)
 material = ExtResource("2_3p5fy")
 
+[node name="Block8" type="CSGBox3D" parent="Blocks"]
+transform = Transform3D(0.662006, 0, 0.749499, 0, 1, 0, -0.749499, 0, 0.662006, 1.33135, 6.14895, -11.5947)
+material_override = ExtResource("2_2lqfv")
+use_collision = true
+size = Vector3(5.60986, 12.2979, 6.47704)
+material = ExtResource("2_3p5fy")
+
 [node name="Block5" type="CSGBox3D" parent="Blocks"]
-transform = Transform3D(0.840576, 0, -0.541694, 0, 1, 0, 0.541694, 0, 0.840576, 43.2329, 8.791, 53.6889)
+transform = Transform3D(0.840576, 0, -0.541694, 0, 1, 0, 0.541694, 0, 0.840576, 43.2329, 8.291, 53.6889)
+material_override = ExtResource("2_2lqfv")
 use_collision = true
 size = Vector3(22.2831, 16.582, 4.638)
 material = ExtResource("2_3p5fy")
 
 [node name="Block2" type="CSGBox3D" parent="Blocks"]
-transform = Transform3D(1, 0, 0, 0, 0.965926, 0.258819, 0, -0.258819, 0.965926, -1.617, 0.912515, 27.9119)
+transform = Transform3D(0.150467, -0.255872, 0.954929, 0, 0.965926, 0.258819, -0.988615, -0.0389437, 0.14534, -20.2381, 0.825239, -14.8957)
+material_override = ExtResource("2_2lqfv")
 use_collision = true
 size = Vector3(8.56885, 5, 25)
 material = ExtResource("2_3p5fy")
 
 [node name="Block3" type="CSGBox3D" parent="Blocks"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 15, -9)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 15.8268, 25.4269, -9)
+material_override = ExtResource("2_2lqfv")
 use_collision = true
 size = Vector3(6, 5, 5)
 material = ExtResource("2_3p5fy")
 
 [node name="Block6" type="CSGBox3D" parent="Blocks"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 18, 15, -14)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 29.4861, 33.9879, -14)
+material_override = ExtResource("2_2lqfv")
 use_collision = true
 size = Vector3(6, 5, 5)
 material = ExtResource("2_3p5fy")
 
 [node name="Block7" type="CSGBox3D" parent="Blocks"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 33, 15, -17)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 43.6344, 42.7539, -17)
+material_override = ExtResource("2_2lqfv")
 use_collision = true
 size = Vector3(6, 5, 5)
 material = ExtResource("2_3p5fy")
 
 [node name="Player" parent="." instance=ExtResource("3_oomu2")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 27, 0.5, 1)
+transform = Transform3D(-0.712394, 0, -0.70178, 0, 1, 0, 0.70178, 0, -0.712394, -46.4584, 0, -29.6526)
 cam_sensitivity = 10.0
 
 [node name="Camera3D" type="Camera3D" parent="."]
 transform = Transform3D(0.258819, 0, -0.965926, 0, 1, 0, 0.965926, 0, 0.258819, 18, 5, 0)
+
+[node name="Checkpoints" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1, 0)
+
+[node name="Checkpoint" parent="Checkpoints" instance=ExtResource("6_avy1i")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -35.4977, 1.5, -15.4134)
+
+[node name="Checkpoint2" parent="Checkpoints" instance=ExtResource("6_avy1i")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.531538, 13.7979, -11.592)
+
+[node name="Checkpoint3" parent="Checkpoints" instance=ExtResource("6_avy1i")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 58.9981, 40.7988, -13.9719)
+
+[node name="Signs" type="Node3D" parent="."]
+transform = Transform3D(1.00486, 0, 0, 0, 1.00486, 0, 0, 0, 1.00486, 0, 0, 0)
+
+[node name="Sign" parent="Signs" instance=ExtResource("4_nj5mg")]
+transform = Transform3D(0.597793, 0, 0.801651, 0, 1, 0, -0.801651, 0, 0.597793, -42.5703, 0, -27.3273)
+text = "Welcome to the
+
+MOVEMENT MAGE
+
+SANDBOX LEVEL!!!!!!"
+
+[node name="Sign2" parent="Signs" instance=ExtResource("4_nj5mg")]
+transform = Transform3D(0.967223, 0, 0.253927, 0, 1, 0, -0.253927, 0, 0.967223, -45.1437, 0, -25.8794)
+text = "CONTROLS
+----------------------
+Grapple - Left Click
+Ice Path - Right Click
+Repulsor - R
+Fireball - F"
+
+[node name="Sign3" parent="Signs" instance=ExtResource("4_nj5mg")]
+transform = Transform3D(0.985372, 0, 0.170416, 0, 1, 0, -0.170416, 0, 0.985372, 59.3289, 39.1089, -8.41456)
+text = "Nice job ;)"
+
+[node name="Sign4" parent="Signs" instance=ExtResource("4_nj5mg")]
+transform = Transform3D(0.71254, 0, 0.701632, 0, 1, 0, -0.701632, 0, 0.71254, -35.6673, -9.49062e-07, -14.4274)
+text = "Checkpoints
+Press K to KYS
+(Repectfully)"
