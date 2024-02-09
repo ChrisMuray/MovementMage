@@ -13,3 +13,10 @@ Ice Path - Right Click
 Fireball - F
 
 Repulsor - R to lauch, R again to explode
+
+
+## Fun
+
+Front View Camera - P
+
+Thumbs Up - T
