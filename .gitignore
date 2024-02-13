@@ -2,6 +2,7 @@
 .godot/
 *.translation
 *.tmp
+AllSkyFree/*
 
 # for mac users
 **/.DS_Store

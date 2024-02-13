@@ -54,7 +54,9 @@ var double_jumps_left := 0
 @onready var info_label: Label = $InfoLabel
 @onready var center_of_mass: Node3D = $CenterOfMass
 @onready var grapple_path: Path3D = $CenterOfMass/GrapplePath
-@onready var arms_animation_player: AnimationPlayer = $CameraPivot/Camera3D/Arms/ArmsAnimationPlayer
+@onready var animation_player: AnimationPlayer = $Mage/AnimationPlayer
+@onready var current_animation_label: Label = $CurrentAnimationLabel
+
 
 func _ready() -> void:
 	initialize_grapple_hook()
@@ -67,7 +69,8 @@ func _physics_process(delta: float) -> void:
 	"\nSPEED: " + str(snapped(get_real_velocity().length(), 0.01)) + \
 	"\nOn Ice: " + str(on_ice) + \
 	"\nOn Wall: " + str(is_on_wall_only()) + \
-	"\nGrappling: " + str(grappling)
+	"\nGrappling: " + str(grappling) + \
+	"\nAnimation: " + animation_player.current_animation
 	
 	## CAMERA
 	if Input.mouse_mode == Input.MOUSE_MODE_CAPTURED:
@@ -154,11 +157,25 @@ func _physics_process(delta: float) -> void:
 	if Input.is_action_just_released("grapple"):
 		grappling = false
 	
-	if Input.is_action_just_pressed("thumbs_up"):
-		arms_animation_player.play("ThumbsUp")
-	
 	if Input.is_action_just_pressed("die"):
 		die()
+	
+	
+	## ANIMATION
+	if is_on_floor() and velocity.length() > 0:
+		animation_player.play("Run")
+	
+	elif Input.is_action_just_pressed("1"):
+		animation_player.play("Skill1")
+	
+	elif Input.is_action_pressed("2"):
+		animation_player.play("Skill2Hold")
+	
+	elif Input.is_action_just_pressed("3"):
+		animation_player.play("Skill3")
+		
+	if not animation_player.is_playing():
+		animation_player.play("Idle")
 	
 	move_and_slide()
 
