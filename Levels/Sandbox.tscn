@@ -75,10 +75,10 @@ size = Vector3(5.60986, 12.2979, 6.47704)
 material = ExtResource("2_3p5fy")
 
 [node name="Block5" type="CSGBox3D" parent="Blocks"]
-transform = Transform3D(0.840576, 0, -0.541694, 0, 1, 0, 0.541694, 0, 0.840576, 43.2329, 8.291, 53.6889)
+transform = Transform3D(0.840576, 0, -0.541694, 0, 1, 0, 0.541694, 0, 0.840576, 50.4377, 4.9732, 58.9018)
 material_override = ExtResource("2_2lqfv")
 use_collision = true
-size = Vector3(22.2831, 16.582, 4.638)
+size = Vector3(22.2831, 9.9464, 4.638)
 material = ExtResource("2_3p5fy")
 
 [node name="Block2" type="CSGBox3D" parent="Blocks"]
@@ -93,6 +93,13 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 15.8268, 25.4269, -9)
 material_override = ExtResource("2_2lqfv")
 use_collision = true
 size = Vector3(6, 5, 5)
+material = ExtResource("2_3p5fy")
+
+[node name="Block9" type="CSGBox3D" parent="Blocks"]
+transform = Transform3D(0.817085, 0, -0.576518, 0, 1, 0, 0.576518, 0, 0.817085, 33.2377, 20.2698, 45.1476)
+material_override = ExtResource("2_2lqfv")
+use_collision = true
+size = Vector3(2.24048, 2.20264, 2.56201)
 material = ExtResource("2_3p5fy")
 
 [node name="Block6" type="CSGBox3D" parent="Blocks"]
@@ -110,7 +117,7 @@ size = Vector3(6, 5, 5)
 material = ExtResource("2_3p5fy")
 
 [node name="Player" parent="." instance=ExtResource("3_oomu2")]
-transform = Transform3D(-0.712394, 0, -0.70178, 0, 1, 0, 0.70178, 0, -0.712394, -46.4584, 0, -29.6526)
+transform = Transform3D(-0.712394, 0, -0.70178, 0, 1, 0, 0.70178, 0, -0.712394, 24.3927, 9.84972, 34.988)
 cam_sensitivity = 10.0
 
 [node name="Camera3D" type="Camera3D" parent="."]

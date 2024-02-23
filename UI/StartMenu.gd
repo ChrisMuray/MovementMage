@@ -9,6 +9,7 @@ var paused := true:
 
 func _ready() -> void:
 	paused = Global.first_load
+	#paused = false
 
 func _process(_delta: float) -> void:
 	if Input.is_action_just_pressed("ui_cancel"):

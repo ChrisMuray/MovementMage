@@ -13,7 +13,6 @@ class_name Player extends CharacterBody3D
 @export var jump_height := 1.0
 @export var double_jump_count := 1
 @export var fall_multiplier := 2.0
-@export var grapple_force := 1.0
 
 # Ability scenes
 @export var iceblock_scene: PackedScene
@@ -34,11 +33,7 @@ var crouching := false:
 	set(val):
 		crouching = val
 		scale.y = lerp(scale.y, 0.5, 0.5) if val else lerp(scale.y, 1.0, 0.5)
-var grappling := false:
-	set(val):
-		grappling = val
-		grapple_path.visible = val
-var grapple_point: Vector3
+var grappling := false
 var on_ice := false
 var ice_num := 0:
 	set(val):
@@ -53,13 +48,13 @@ var double_jumps_left := 0
 @onready var raycast: RayCast3D = $CameraPivot/Camera3D/Raycast3D
 @onready var info_label: Label = $InfoLabel
 @onready var center_of_mass: Node3D = $CenterOfMass
-@onready var grapple_path: Path3D = $CenterOfMass/GrapplePath
-@onready var animation_player: AnimationPlayer = $Mage/AnimationPlayer
-@onready var current_animation_label: Label = $CurrentAnimationLabel
+@onready var grapple_hook: Path3D = $GrappleHook
+@onready var animation_player: AnimationPlayer = $CameraPivot/Mage/AnimationPlayer
+@onready var collider: CollisionShape3D = $CollisionShape3D
 
 
 func _ready() -> void:
-	initialize_grapple_hook()
+	# Respawn point
 	if Global.checkpoint_positions:
 		global_position = Global.checkpoint_positions[-1]
 
@@ -69,7 +64,7 @@ func _physics_process(delta: float) -> void:
 	"\nSPEED: " + str(snapped(get_real_velocity().length(), 0.01)) + \
 	"\nOn Ice: " + str(on_ice) + \
 	"\nOn Wall: " + str(is_on_wall_only()) + \
-	"\nGrappling: " + str(grappling) + \
+	"\nGrappling: " + str(grapple_hook.grappling) + \
 	"\nAnimation: " + animation_player.current_animation
 	
 	## CAMERA
@@ -84,7 +79,6 @@ func _physics_process(delta: float) -> void:
 	cam.fov = lerp(cam.fov, target_fov, 0.1)
 	
 	## MOVEMENT
-	
 	# Crouching
 	crouching = Input.is_action_pressed("crouch")
 	
@@ -126,14 +120,9 @@ func _physics_process(delta: float) -> void:
 		# Cap air speed
 		velocity = velocity.limit_length(max_air_speed)
 	
-	# Handle jump.
-	if is_on_floor():
-		if Input.is_action_pressed("jump"):
-			velocity.y = sqrt(jump_height * 2 * gravity)
-			double_jumps_left = double_jump_count
-	elif double_jumps_left > 0 and Input.is_action_just_pressed("jump"):
-		velocity.y = 1.5 * sqrt(jump_height * 2 * gravity)
-		double_jumps_left -= 1
+	# Handle jump
+	if Input.is_action_just_pressed("jump"):
+		jump()
 	
 	## ABILITIES
 	if Input.is_action_just_pressed("fireball"):
@@ -147,37 +136,32 @@ func _physics_process(delta: float) -> void:
 	if Input.is_action_just_pressed("repulse"):
 		handle_repulsor()
 	
-	if Input.is_action_pressed("grapple"):
-		if not grappling and raycast.is_colliding():
-			start_grapple()
-			grappling = true
-		elif grappling:
-			grapple()
-	
-	if Input.is_action_just_released("grapple"):
-		grappling = false
-	
 	if Input.is_action_just_pressed("die"):
 		die()
 	
-	
 	## ANIMATION
-	if is_on_floor() and velocity.length() > 0:
-		animation_player.play("Run")
+	if is_on_floor():
+		if Input.is_action_pressed("ice_path"):
+			animation_player.play("Skill2Hold")
+		elif velocity.length() > 0:
+			animation_player.play("Run")
+		else:
+			if Input.is_action_just_pressed("1"):
+				animation_player.play("Skill1")
+			elif Input.is_action_pressed("2"):
+				animation_player.play("Skill2Hold")
+			elif Input.is_action_just_pressed("3"):
+				animation_player.play("Skill3")
+			elif not animation_player.is_playing():
+				animation_player.play("Idle")
 	
-	elif Input.is_action_just_pressed("1"):
-		animation_player.play("Skill1")
-	
-	elif Input.is_action_pressed("2"):
-		animation_player.play("Skill2Hold")
-	
-	elif Input.is_action_just_pressed("3"):
-		animation_player.play("Skill3")
-		
-	if not animation_player.is_playing():
-		animation_player.play("Idle")
-	
-	move_and_slide()
+	if grappling:
+		global_position = grapple_hook.swing_node.global_position - center_of_mass.position
+		if Input.is_action_just_pressed("jump"):
+			grapple_hook.stop_grapple()
+			jump()
+	else:
+		move_and_slide()
 
 func _input(event: InputEvent) -> void:
 	if event is InputEventMouseMotion:
@@ -190,6 +174,14 @@ func handle_camera_rotation() ->void:
 		camera_pivot.rotation_degrees.x, -90.0, 90.0
 	)
 	mouse_motion = Vector2.ZERO
+
+func jump() -> void:
+	if is_on_floor() or grappling:
+			velocity.y = sqrt(jump_height * 2 * gravity)
+			double_jumps_left = double_jump_count
+	elif double_jumps_left > 0:
+		velocity.y = sqrt(jump_height * 2 * gravity)
+		double_jumps_left -= 1
 
 func place_ice() -> void:
 	var normal = raycast.get_collision_normal()
@@ -222,41 +214,8 @@ func handle_repulsor() -> void:
 	else:
 		for c in get_children():
 			if c is Repulsor:
-				var displacement = center_of_mass.global_position - c.global_position
-				var distance = clampf(displacement.length(), 0, c.explode_radius)
-				var launch_direction = displacement.normalized()
-				velocity += c.explode_force * c.force_curve.sample(distance / c.explode_radius) * launch_direction
-				c.queue_free()
+				c.explode(self)
 		repulsor_out = false
-
-func initialize_grapple_hook() -> void:
-	# Curve to draw grapple line
-	var grapple_curve = Curve3D.new()
-	grapple_curve.add_point(Vector3.ZERO)
-	grapple_curve.add_point(Vector3.ZERO)
-	grapple_path.curve = grapple_curve
-	
-	# Placeholder grapple hook
-	var grapple_shape = CSGPolygon3D.new()
-	grapple_shape.polygon = PackedVector2Array([
-		Vector2(-0.05, -0.05),
-		Vector2(-0.05, 0.05),
-		Vector2(0.05, 0.05),
-		Vector2(0.05, -0.05)
-	])
-	grapple_shape.mode = CSGPolygon3D.MODE_PATH
-	grapple_shape.path_local = true
-	grapple_shape.set_path_node(grapple_path.get_path())
-	grapple_path.add_child(grapple_shape)
-
-func start_grapple() -> void:
-	grapple_point = raycast.get_collision_point()
-	grapple()
-
-func grapple() -> void:
-	grapple_path.curve.set_point_position(0, Vector3.ZERO)
-	grapple_path.curve.set_point_position(1, grapple_path.to_local(grapple_point))
-	velocity += (grapple_point - global_position).normalized() * grapple_force
 
 func die() -> void:
 	Global.first_load = false

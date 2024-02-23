@@ -1,0 +1,28 @@
+[gd_scene load_steps=4 format=3 uid="uid://ei8us77jw750"]
+
+[ext_resource type="Script" path="res://Abilities/GrappleHook/GrappleHook.gd" id="1_qrwtb"]
+
+[sub_resource type="Curve3D" id="Curve3D_qhl2k"]
+_data = {
+"points": PackedVector3Array(0, 0, 0, 0, 0, 0, 0.173763, 0.470098, 0.00372189),
+"tilts": PackedFloat32Array(0)
+}
+point_count = 1
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_08ohy"]
+radius = 1.0
+
+[node name="GrappleHook" type="Path3D"]
+curve = SubResource("Curve3D_qhl2k")
+script = ExtResource("1_qrwtb")
+
+[node name="GrappleNode" type="StaticBody3D" parent="."]
+top_level = true
+visible = false
+
+[node name="SwingNode" type="RigidBody3D" parent="."]
+top_level = true
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="SwingNode"]
+shape = SubResource("SphereShape3D_08ohy")
+disabled = true

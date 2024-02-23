@@ -29,3 +29,14 @@ func _physics_process(delta: float) -> void:
 		velocity = Vector3.ZERO
 	mesh.rotation += delta * angular_velocity
 	move_and_slide()
+
+func explode(p: Player):
+	var displacement = p.center_of_mass.global_position - global_position
+	var distance = clampf(displacement.length(), 0, explode_radius)
+	var launch_direction = displacement.normalized()
+	var impulse = explode_force * force_curve.sample(distance / explode_radius) * launch_direction
+	if p.grappling:
+		p.grapple_hook.swing_node.apply_central_impulse(impulse)
+	else:	
+		p.velocity += impulse
+	queue_free()
