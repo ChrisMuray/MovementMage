@@ -5,9 +5,9 @@ class_name Player extends CharacterBody3D
 @export var fov_limits := Vector2(75.0, 115.0)
 
 # Movement parameters
-@export var walking_speed := 5.0
-@export var max_ground_speed := 15.0
-@export var max_air_speed := 20.0
+@export var walking_speed := 10.0
+@export var max_ground_speed := 25.0
+@export var max_air_speed := 45.0
 @export var air_control := 0.2
 @export var air_control_directionality := 1.0
 @export var jump_height := 1.0
@@ -42,6 +42,16 @@ var ice_num := 0:
 var repulsor_out := false
 var double_jumps_left := 0
 
+var air_dash := false:
+	set(val):
+		air_dash = val
+		if air_dash:
+			await get_tree().create_timer(dash_time).timeout
+			velocity = walking_speed*velocity.normalized()
+			air_dash = false
+var dash_time := 0.2
+var dash_speed := 50.0
+
 @onready var camera_pivot: Node3D = $CameraPivot
 @onready var cam: Camera3D = $CameraPivot/Camera3D
 @onready var third_person_cam: Camera3D = $CameraPivot/Camera3D/ThirdPersonCam
@@ -49,9 +59,8 @@ var double_jumps_left := 0
 @onready var info_label: Label = $InfoLabel
 @onready var center_of_mass: Node3D = $CenterOfMass
 @onready var grapple_hook: Path3D = $GrappleHook
-@onready var animation_player: AnimationPlayer = $CameraPivot/Mage/AnimationPlayer
+@onready var animation_player: AnimationPlayer = $CameraPivot/Camera3D/Arms/AnimationPlayer
 @onready var collider: CollisionShape3D = $CollisionShape3D
-
 
 func _ready() -> void:
 	# Respawn point
@@ -104,25 +113,32 @@ func _physics_process(delta: float) -> void:
 		velocity = velocity.limit_length(max_ground_speed)
 	
 	else: # Air movement logic
-		# Add gravity, fall faster if moving downward for snappier / weightier feel
-		velocity.y -= gravity * delta * (fall_multiplier if velocity.y < 0 else 1.0) 
-
+		if air_dash:
+			velocity = dash_speed * direction
+		else:
+			# Add gravity, fall faster if moving downward for snappier / weightier feel
+			velocity.y -= gravity * delta * (fall_multiplier if velocity.y < 0 else 1.0) 
 		# Air control
-		if direction:
-			# 0 when input dir is in same dir as current horizontal velocity,
-			# and 1 when in opposite direction.
-			var val := .5*(1-hv.normalized().dot(direction.normalized()))
-			var old_max_xz_speed = hv.length()
-			hv = hv + direction * air_control * (1 + air_control_directionality * val)
-			hv = hv.limit_length(max(old_max_xz_speed, max_air_speed))
-			velocity.x = hv.x
-			velocity.z = hv.z
+			if direction:
+				# 0 when input dir is in same dir as current horizontal velocity,
+				# and 1 when in opposite direction.
+				var val := .5*(1-hv.normalized().dot(direction.normalized()))
+				var old_max_xz_speed = hv.length()
+				hv = hv + direction * air_control * (1 + air_control_directionality * val)
+				hv = hv.limit_length(max(old_max_xz_speed, max_air_speed))
+				velocity.x = hv.x
+				velocity.z = hv.z
+			
 		# Cap air speed
 		velocity = velocity.limit_length(max_air_speed)
 	
 	# Handle jump
 	if Input.is_action_just_pressed("jump"):
 		jump()
+	
+	if Input.is_action_just_pressed("air_dash"):
+		if not is_on_floor():
+			air_dash = true
 	
 	## ABILITIES
 	if Input.is_action_just_pressed("fireball"):
@@ -182,6 +198,9 @@ func jump() -> void:
 	elif double_jumps_left > 0:
 		velocity.y = sqrt(jump_height * 2 * gravity)
 		double_jumps_left -= 1
+
+func stop_dash() -> void:
+	air_dash = false
 
 func place_ice() -> void:
 	var normal = raycast.get_collision_normal()

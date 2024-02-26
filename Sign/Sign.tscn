@@ -1,20 +1,20 @@
 [gd_scene load_steps=8 format=3 uid="uid://desdlvedi7xdk"]
 
-[ext_resource type="Texture2D" uid="uid://pthx4v2b5181" path="res://Assets/Models/StaffTest_staffwood.jpg" id="1_255yp"]
 [ext_resource type="Script" path="res://Sign/Sign.gd" id="1_wxr73"]
+[ext_resource type="Texture2D" uid="uid://b41ovsdof55ry" path="res://Assets/Models/Mage_staffwood.jpg" id="2_m3lj8"]
 [ext_resource type="FontFile" uid="uid://dfksu5vreti5x" path="res://Assets/Fonts/MedievalSharp-Regular.ttf" id="3_vy3vu"]
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_b1bne"]
-albedo_texture = ExtResource("1_255yp")
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_qmad5"]
+albedo_texture = ExtResource("2_m3lj8")
 
 [sub_resource type="CylinderMesh" id="CylinderMesh_pacdx"]
 top_radius = 0.05
 bottom_radius = 0.05
 height = 1.0
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_e2nhe"]
-albedo_texture = ExtResource("1_255yp")
-uv1_offset = Vector3(-1.035, 0.44, 0)
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_p1tdp"]
+albedo_texture = ExtResource("2_m3lj8")
+uv1_offset = Vector3(0.785, -0.76, 0)
 
 [sub_resource type="BoxMesh" id="BoxMesh_i80e0"]
 size = Vector3(0.66, 1, 0.1)
@@ -24,12 +24,12 @@ script = ExtResource("1_wxr73")
 
 [node name="PostMesh" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
-material_override = SubResource("StandardMaterial3D_b1bne")
+material_override = SubResource("StandardMaterial3D_qmad5")
 mesh = SubResource("CylinderMesh_pacdx")
 
 [node name="FaceMesh" type="MeshInstance3D" parent="."]
 transform = Transform3D(-4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0, 1, 0, 1.33, 0)
-material_override = SubResource("StandardMaterial3D_e2nhe")
+material_override = SubResource("StandardMaterial3D_p1tdp")
 mesh = SubResource("BoxMesh_i80e0")
 
 [node name="Label3D" type="Label3D" parent="FaceMesh"]

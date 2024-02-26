@@ -28,13 +28,13 @@ func _physics_process(delta: float) -> void:
 		stop_grapple()
 
 func initialize_grapple_hook() -> void:
-	# Curve to draw grapple line
+	# Initialize curve to draw line
 	var grapple_curve = Curve3D.new()
 	grapple_curve.add_point(Vector3.ZERO)
 	grapple_curve.add_point(Vector3.ZERO)
 	curve = grapple_curve
 	
-	# Placeholder grapple hook
+	# Placeholder grapple hook mesh
 	var grapple_shape = CSGPolygon3D.new()
 	grapple_shape.polygon = PackedVector2Array([
 		Vector2(-0.05, -0.05),
