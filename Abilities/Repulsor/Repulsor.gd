@@ -15,6 +15,7 @@ var angular_velocity: Vector3
 
 @onready var mesh: MeshInstance3D = $MeshInstance3D
 @onready var spawn_velocity: Vector3 = get_parent().get_real_velocity() 
+@onready var explode_audio: AudioStreamPlayer3D = $ExplodeAudio
 
 func _ready() -> void:
 	angular_velocity = rotation_speed * Vector3(randf(), randf(), randf()).normalized()
@@ -35,8 +36,13 @@ func explode(p: Player):
 	var distance = clampf(displacement.length(), 0, explode_radius)
 	var launch_direction = displacement.normalized()
 	var impulse = explode_force * force_curve.sample(distance / explode_radius) * launch_direction
-	if p.grappling:
+	if p.grapple_hook.grappling:
 		p.grapple_hook.swing_node.apply_central_impulse(impulse)
 	else:	
 		p.velocity += impulse
+	explode_audio.play()
+	visible = false
+
+
+func _on_explode_audio_finished() -> void:
 	queue_free()

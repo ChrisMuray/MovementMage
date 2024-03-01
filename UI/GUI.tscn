@@ -1,0 +1,60 @@
+[gd_scene load_steps=4 format=3 uid="uid://ctsn12omgsav2"]
+
+[ext_resource type="Script" path="res://UI/IceBar.gd" id="1_0xt1c"]
+[ext_resource type="Script" path="res://UI/GUI.gd" id="1_vxgeb"]
+[ext_resource type="Script" path="res://Player/Crosshair.gd" id="2_xpuua"]
+
+[node name="GUI" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_vxgeb")
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 20
+
+[node name="IceBar" type="ColorRect" parent="MarginContainer"]
+custom_minimum_size = Vector2(200, 20)
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 8
+color = Color(0, 0, 0, 1)
+script = ExtResource("1_0xt1c")
+metadata/_edit_use_anchors_ = true
+
+[node name="ProgressRect" type="ColorRect" parent="MarginContainer/IceBar"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 5.0
+offset_top = 5.0
+offset_right = -5.0
+offset_bottom = -5.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 1, 1, 1)
+
+[node name="CrosshairCenter" type="CenterContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Crosshair" type="Control" parent="CrosshairCenter"]
+layout_mode = 2
+script = ExtResource("2_xpuua")

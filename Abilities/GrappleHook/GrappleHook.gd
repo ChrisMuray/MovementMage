@@ -3,7 +3,6 @@ extends Path3D
 var grappling := false:
 	set(val):
 		grappling = val
-		player.grappling = grappling
 		player.collider.disabled = grappling
 		collider.disabled = not grappling
 		visible = grappling
@@ -18,7 +17,7 @@ var joint: PinJoint3D
 func _ready() -> void:
 	initialize_grapple_hook()
 
-func _physics_process(delta: float) -> void:
+func _physics_process(_delta: float) -> void:
 
 	if Input.is_action_just_pressed("grapple") and not grappling and player.raycast.is_colliding():
 		start_grapple(player.raycast.get_collision_point())
@@ -48,6 +47,9 @@ func initialize_grapple_hook() -> void:
 	add_child(grapple_shape)
 
 func start_grapple(point: Vector3) -> void:
+	if point.y < player.center_of_mass.global_position.y:
+		return
+	
 	grappling = true
 	grapple_point = point
 	grapple_node.global_position = point

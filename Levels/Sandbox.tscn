@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=3 uid="uid://hfd6aam6qf82"]
+[gd_scene load_steps=16 format=3 uid="uid://hfd6aam6qf82"]
 
 [ext_resource type="Texture2D" uid="uid://mebohubes5gy" path="res://Assets/kenney_prototype-textures/PNG/Dark/texture_01.png" id="1_qrte1"]
 [ext_resource type="Texture2D" uid="uid://cpcfu2wrutxju" path="res://Assets/AllSkyFree_Skyboxes/Epic_BlueSunset_EquiRect_flat.png" id="1_y53yd"]
@@ -17,8 +17,11 @@ sky_material = SubResource("PanoramaSkyMaterial_hltt3")
 [sub_resource type="Environment" id="Environment_viek2"]
 background_mode = 2
 sky = SubResource("Sky_d25uv")
+reflected_light_source = 1
 tonemap_mode = 2
 glow_enabled = true
+volumetric_fog_density = 0.02
+volumetric_fog_albedo = Color(0.886275, 0.521569, 0, 1)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_dhfbf"]
 size = Vector3(200, 1, 200)
@@ -31,6 +34,10 @@ uv1_world_triplanar = true
 [sub_resource type="BoxMesh" id="BoxMesh_p6t8c"]
 lightmap_size_hint = Vector2i(14, 21)
 size = Vector3(200, 1, 200)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_ovvj2"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_ctvah"]
 
 [node name="Sandbox" type="Node3D"]
 
@@ -119,7 +126,6 @@ material = ExtResource("2_3p5fy")
 [node name="Player" parent="." instance=ExtResource("3_oomu2")]
 transform = Transform3D(-0.712394, 0, -0.70178, 0, 1, 0, 0.70178, 0, -0.712394, -38.5321, 0.253113, -23.5708)
 cam_sensitivity = 10.0
-max_air_speed = 45.0
 
 [node name="Camera3D" type="Camera3D" parent="."]
 transform = Transform3D(0.258819, 0, -0.965926, 0, 1, 0, 0.965926, 0, 0.258819, 18, 5, 0)
@@ -165,3 +171,30 @@ transform = Transform3D(0.71254, 0, 0.701632, 0, 1, 0, -0.701632, 0, 0.71254, -3
 text = "Checkpoints
 Press K to KYS
 (Repectfully)"
+
+[node name="RigidBody3D" type="RigidBody3D" parent="."]
+transform = Transform3D(0.964026, 0, -0.265808, 0, 1, 0, 0.265808, 0, 0.964026, -34.7098, 0.5, -25.0136)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="RigidBody3D"]
+shape = SubResource("BoxShape3D_ovvj2")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="RigidBody3D"]
+mesh = SubResource("BoxMesh_ctvah")
+
+[node name="RigidBody3D2" type="RigidBody3D" parent="."]
+transform = Transform3D(0.979184, 0, 0.202975, 0, 1, 0, -0.202975, 0, 0.979184, -34.7098, 0.5, -23.7654)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="RigidBody3D2"]
+shape = SubResource("BoxShape3D_ovvj2")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="RigidBody3D2"]
+mesh = SubResource("BoxMesh_ctvah")
+
+[node name="RigidBody3D3" type="RigidBody3D" parent="."]
+transform = Transform3D(0.427342, 0, 0.90409, 0, 1, 0, -0.90409, 0, 0.427342, -34.7098, 1.5, -24.3764)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="RigidBody3D3"]
+shape = SubResource("BoxShape3D_ovvj2")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="RigidBody3D3"]
+mesh = SubResource("BoxMesh_ctvah")

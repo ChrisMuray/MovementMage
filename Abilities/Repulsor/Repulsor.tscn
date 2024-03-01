@@ -1,6 +1,7 @@
-[gd_scene load_steps=9 format=3 uid="uid://10fnp841kyh0"]
+[gd_scene load_steps=10 format=3 uid="uid://10fnp841kyh0"]
 
 [ext_resource type="Script" path="res://Abilities/Repulsor/Repulsor.gd" id="1_6qdws"]
+[ext_resource type="AudioStream" uid="uid://bhagbls7ybp5x" path="res://Assets/Sounds/reuplse_detonate.mp3" id="2_sctnk"]
 
 [sub_resource type="Curve" id="Curve_5xqxi"]
 _data = [Vector2(0, 1), 0.0, -2.23285, 0, 1, Vector2(0.369427, 0.175127), -0.505386, -0.505386, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
@@ -49,3 +50,8 @@ shape = SubResource("SphereShape3D_3a4rm")
 transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, 0, 0)
 material_override = SubResource("StandardMaterial3D_8232a")
 mesh = SubResource("SphereMesh_ikf1n")
+
+[node name="ExplodeAudio" type="AudioStreamPlayer3D" parent="."]
+stream = ExtResource("2_sctnk")
+
+[connection signal="finished" from="ExplodeAudio" to="." method="_on_explode_audio_finished"]

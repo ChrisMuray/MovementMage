@@ -1,12 +1,14 @@
-[gd_scene load_steps=14 format=3 uid="uid://xj4im0umqm43"]
+[gd_scene load_steps=16 format=3 uid="uid://xj4im0umqm43"]
 
 [ext_resource type="Script" path="res://Player/Player.gd" id="1_dgsno"]
 [ext_resource type="PackedScene" uid="uid://bf85qk4ofe0a2" path="res://Abilities/IceBlock/IceBlock.tscn" id="2_5soes"]
-[ext_resource type="Script" path="res://Player/Crosshair.gd" id="2_yypid"]
 [ext_resource type="PackedScene" uid="uid://ditllddlclp58" path="res://Abilities/Fireball/Fireball.tscn" id="3_lujqw"]
 [ext_resource type="PackedScene" uid="uid://10fnp841kyh0" path="res://Abilities/Repulsor/Repulsor.tscn" id="4_hgjck"]
 [ext_resource type="PackedScene" uid="uid://vyws3rynag82" path="res://UI/StartMenu.tscn" id="7_tkjxb"]
 [ext_resource type="PackedScene" uid="uid://d0s3wpnpk3edg" path="res://Assets/Models/Mage.glb" id="8_fecxb"]
+[ext_resource type="PackedScene" uid="uid://ctsn12omgsav2" path="res://UI/GUI.tscn" id="8_syr4s"]
+[ext_resource type="Script" path="res://Player/IcePath.gd" id="9_8u6df"]
+[ext_resource type="Script" path="res://Player/Repulse.gd" id="10_lhiaj"]
 [ext_resource type="PackedScene" uid="uid://ei8us77jw750" path="res://Abilities/GrappleHook/GrappleHook.tscn" id="13_j58rf"]
 
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_nppyd"]
@@ -32,9 +34,7 @@ script = ExtResource("1_dgsno")
 cam_sensitivity = 2.5
 fov_limits = Vector2(75, 100)
 fall_multiplier = 3.0
-iceblock_scene = ExtResource("2_5soes")
 fireball_scene = ExtResource("3_lujqw")
-repulsor_scene = ExtResource("4_hgjck")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
@@ -52,34 +52,26 @@ cull_mask = 1048569
 current = true
 
 [node name="Arms" parent="CameraPivot/Camera3D" instance=ExtResource("8_fecxb")]
-transform = Transform3D(-0.5, 0, -4.37114e-08, 0, 0.5, 0, 4.37114e-08, 0, -0.5, 0, -0.807, 0)
+transform = Transform3D(-0.5, 0, -7.54979e-08, 0, 0.5, 0, 7.54979e-08, 0, -0.5, 0, -0.807, 0)
 
 [node name="Skeleton3D" parent="CameraPivot/Camera3D/Arms/Armature" index="0"]
-bones/0/rotation = Quaternion(0, 0.00122138, 0, 0.999999)
-bones/1/rotation = Quaternion(0.196613, -0.451283, 0.814473, -0.307117)
-bones/2/rotation = Quaternion(0.675199, 0.0300734, -0.331214, 0.658407)
-bones/3/rotation = Quaternion(0.0448281, 0.152118, 0.0852152, 0.983661)
+bones/1/rotation = Quaternion(0.112512, -0.086836, 0.979106, -0.145439)
+bones/2/rotation = Quaternion(0.16163, 0.0448833, -0.0792867, 0.982637)
+bones/3/rotation = Quaternion(0.0448281, 0.152118, 0.0852153, 0.983661)
 bones/4/rotation = Quaternion(0.0551694, 0.736926, 0.0246305, 0.673268)
-bones/5/rotation = Quaternion(0.698765, -0.0156218, 0.0907545, 0.7094)
-bones/6/rotation = Quaternion(0.720816, -0.0936595, -0.0332948, 0.685962)
-bones/7/rotation = Quaternion(0.728071, -0.0790896, 0.0143487, 0.680772)
-bones/8/rotation = Quaternion(0.135501, 0.833086, 0.319203, 0.430949)
-bones/9/rotation = Quaternion(0.132679, 0.00320387, 0.0366263, 0.990477)
-bones/10/rotation = Quaternion(0.519757, -0.127129, 0.25232, 0.806242)
+bones/5/rotation = Quaternion(0.0706887, -0.0708155, 0.0588692, 0.993239)
+bones/7/rotation = Quaternion(0.111565, -0.0694614, -0.0404495, 0.990501)
+bones/9/rotation = Quaternion(0.134577, 0.0026261, 0.0373942, 0.990194)
 bones/11/rotation = Quaternion(-0.0100172, 0.711261, -0.102394, 0.695359)
-bones/12/rotation = Quaternion(0.667592, 0.0182552, 0.121557, 0.73431)
-bones/13/rotation = Quaternion(0.730984, -0.0830142, 0.0390286, 0.676201)
-bones/14/rotation = Quaternion(0.688415, -0.0549927, 0.00716248, 0.723193)
+bones/12/rotation = Quaternion(0.0308064, -0.0650568, 0.104292, 0.991938)
+bones/13/rotation = Quaternion(0.116749, -0.0884731, -0.0242303, 0.988916)
 bones/15/rotation = Quaternion(-0.0645806, 0.671277, -0.159855, 0.720877)
-bones/16/rotation = Quaternion(0.715706, 0.0152794, 0.133996, 0.685256)
-bones/17/rotation = Quaternion(0.701051, -0.0548678, 0.00902808, 0.710939)
-bones/18/rotation = Quaternion(0.750399, -0.109231, 0.00795738, 0.651849)
-bones/20/rotation = Quaternion(0.70715, -0.0368329, 0.0419996, 0.704853)
-bones/21/rotation = Quaternion(0.71298, -0.0234937, -0.0126809, 0.700676)
-bones/22/rotation = Quaternion(0.675262, -0.0123854, 0.00607484, 0.737449)
-bones/23/rotation = Quaternion(0.545187, 0.46784, -0.465679, 0.516759)
-bones/24/rotation = Quaternion(-0.246992, 0.0839584, 0.918109, 0.298366)
-bones/25/rotation = Quaternion(0.496887, -0.0380033, 0.243744, 0.832014)
+bones/17/rotation = Quaternion(0.0714277, -0.0475869, -0.0287658, 0.995895)
+bones/20/rotation = Quaternion(0.0800183, -0.0552841, 0.00801917, 0.995227)
+bones/22/rotation = Quaternion(0.0346014, -0.0133634, -0.00342347, 0.999306)
+bones/23/rotation = Quaternion(0.0790026, 0.658179, -0.0503077, 0.747013)
+bones/24/rotation = Quaternion(-0.247302, 0.0831293, 0.91804, 0.298552)
+bones/25/rotation = Quaternion(0.498761, -0.0379398, 0.244663, 0.830625)
 bones/26/rotation = Quaternion(0.152273, 0.124583, -0.0747163, 0.977604)
 bones/27/position = Vector3(0.00972667, 0.144371, 0.0688793)
 bones/27/rotation = Quaternion(0.0768355, -0.737337, -0.000871882, 0.67114)
@@ -104,13 +96,13 @@ bones/43/rotation = Quaternion(0.515424, 0.045907, -0.0318306, 0.855112)
 bones/44/rotation = Quaternion(0.522092, 0.0197238, 0.0179925, 0.852471)
 bones/45/rotation = Quaternion(0.476592, 0.0134878, -0.00289496, 0.879016)
 bones/46/rotation = Quaternion(0.403829, -0.566681, 0.338532, 0.633397)
-bones/47/position = Vector3(0.928319, -0.360709, -1.49596)
-bones/48/position = Vector3(1.28185, -0.0392898, -0.0842623)
+bones/47/position = Vector3(0.910733, -0.360709, -1.46432)
+bones/48/position = Vector3(1.28185, -0.657433, -0.0866359)
 bones/48/rotation = Quaternion(-0.217899, 0.245366, 0.943695, -0.0418897)
 bones/49/position = Vector3(-0.727681, 0.314873, -1.01824)
-bones/50/position = Vector3(-1.62486, 0.239453, 0.9848)
+bones/50/position = Vector3(-1.62287, 0.242252, 0.9848)
 bones/50/rotation = Quaternion(0.977435, 0.0271481, 0.136536, 0.158878)
-bones/51/position = Vector3(-1.64745, 0.347059, 1.31253)
+bones/51/position = Vector3(-1.64465, 0.349859, 1.31253)
 
 [node name="MageStaff" parent="CameraPivot/Camera3D/Arms/Armature/Skeleton3D" index="0"]
 layers = 2
@@ -119,7 +111,7 @@ layers = 2
 layers = 2
 
 [node name="BoneAttachment3D" type="BoneAttachment3D" parent="CameraPivot/Camera3D/Arms/Armature/Skeleton3D" index="2"]
-transform = Transform3D(0.999997, 0, 0.00244276, 0, 1, 0, -0.00244276, 0, 0.999997, -1.64424, 0.347059, 1.31655)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.64465, 0.349859, 1.31253)
 bone_name = "Staff"
 bone_idx = 51
 
@@ -138,7 +130,10 @@ attachments/1/spatial_attachment_path = NodePath("..")
 attachments/1/offset = Vector3(-0.0458774, 0.45123, 0.00830864)
 attachments/2/point_index = 21
 attachments/2/spatial_attachment_path = NodePath("..")
-attachments/2/offset = Vector3(0.000459593, 0.45123, 0.027094)
+attachments/2/offset = Vector3(0.000459589, 0.45123, 0.027094)
+
+[node name="AnimationPlayer" parent="CameraPivot/Camera3D/Arms" index="2"]
+playback_default_blend_time = 0.1
 
 [node name="Visor" type="MeshInstance3D" parent="CameraPivot/Camera3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.4)
@@ -153,31 +148,28 @@ collide_with_areas = true
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0, -4)
 
 [node name="RemoteTransform3D" type="RemoteTransform3D" parent="CameraPivot/Camera3D"]
-remote_path = NodePath("../../../SubViewportContainer/SubViewport/ArmsCamera")
+remote_path = NodePath("../../../ArmViewport/SubViewport/ArmsCamera")
 
 [node name="GrappleHook" parent="." instance=ExtResource("13_j58rf")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
 
+[node name="IcePath" type="Node" parent="."]
+script = ExtResource("9_8u6df")
+iceblock_scene = ExtResource("2_5soes")
+
+[node name="Repulse" type="Node" parent="."]
+script = ExtResource("10_lhiaj")
+repulsor_scene = ExtResource("4_hgjck")
+
 [node name="CenterOfMass" type="Node3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
-
-[node name="CrosshairCenter" type="CenterContainer" parent="."]
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-
-[node name="Crosshair" type="Control" parent="CrosshairCenter"]
-layout_mode = 2
-script = ExtResource("2_yypid")
 
 [node name="InfoLabel" type="Label" parent="."]
 offset_right = 102.0
 offset_bottom = 23.0
 text = "Hello, testing"
 
-[node name="SubViewportContainer" type="SubViewportContainer" parent="."]
+[node name="ArmViewport" type="SubViewportContainer" parent="."]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -185,19 +177,22 @@ grow_horizontal = 2
 grow_vertical = 2
 stretch = true
 
-[node name="SubViewport" type="SubViewport" parent="SubViewportContainer"]
+[node name="SubViewport" type="SubViewport" parent="ArmViewport"]
 transparent_bg = true
 handle_input_locally = false
 canvas_cull_mask = 4293918722
 size = Vector2i(1152, 648)
 render_target_update_mode = 4
 
-[node name="ArmsCamera" type="Camera3D" parent="SubViewportContainer/SubViewport"]
+[node name="ArmsCamera" type="Camera3D" parent="ArmViewport/SubViewport"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 0)
 cull_mask = 2
+
+[node name="GUI" parent="." instance=ExtResource("8_syr4s")]
 
 [node name="StartMenu" parent="." instance=ExtResource("7_tkjxb")]
 visible = false
 
 [editable path="CameraPivot/Camera3D/Arms"]
+[editable path="GUI"]
 [editable path="StartMenu"]

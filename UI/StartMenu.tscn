@@ -81,6 +81,5 @@ text = "Start"
 
 [node name="StartMenuMusic" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("4_i6gdc")
-autoplay = true
 
 [connection signal="pressed" from="CenterContainer/ColorRect/CenterContainer/VBoxContainer/HBoxContainer/StartButton" to="." method="_on_start_button_pressed"]

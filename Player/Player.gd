@@ -10,14 +10,12 @@ class_name Player extends CharacterBody3D
 @export var max_air_speed := 45.0
 @export var air_control := 0.2
 @export var air_control_directionality := 1.0
-@export var jump_height := 1.0
+@export var jump_height := 2.0
 @export var double_jump_count := 1
 @export var fall_multiplier := 2.0
 
 # Ability scenes
-@export var iceblock_scene: PackedScene
 @export var fireball_scene: PackedScene
-@export var repulsor_scene: PackedScene
 
 # Get the gravity from the project settings to be synced with RigidBody nodes.
 var gravity: float = ProjectSettings.get_setting("physics/3d/default_gravity")
@@ -25,6 +23,7 @@ var mouse_motion := Vector2.ZERO
 var first_person := true:
 	set(val):
 		first_person = val
+		arm_viewport.visible = first_person
 		if first_person:
 			cam.make_current()
 		else:
@@ -33,13 +32,6 @@ var crouching := false:
 	set(val):
 		crouching = val
 		scale.y = lerp(scale.y, 0.5, 0.5) if val else lerp(scale.y, 1.0, 0.5)
-var grappling := false
-var on_ice := false
-var ice_num := 0:
-	set(val):
-		ice_num = val
-		on_ice = ice_num > 0
-var repulsor_out := false
 var double_jumps_left := 0
 
 var air_dash := false:
@@ -61,6 +53,12 @@ var dash_speed := 50.0
 @onready var grapple_hook: Path3D = $GrappleHook
 @onready var animation_player: AnimationPlayer = $CameraPivot/Camera3D/Arms/AnimationPlayer
 @onready var collider: CollisionShape3D = $CollisionShape3D
+@onready var arm_viewport: SubViewportContainer = $ArmViewport
+@onready var gui: Control = $GUI
+
+
+@onready var ice_path: Node = $IcePath
+@onready var repulse: Node = $Repulse
 
 func _ready() -> void:
 	# Respawn point
@@ -71,7 +69,7 @@ func _physics_process(delta: float) -> void:
 	## DEBUG INFO
 	info_label.text = "FPS: " + str(1.0/delta) + \
 	"\nSPEED: " + str(snapped(get_real_velocity().length(), 0.01)) + \
-	"\nOn Ice: " + str(on_ice) + \
+	"\nOn Ice: " + str(ice_path.on_ice) + \
 	"\nOn Wall: " + str(is_on_wall_only()) + \
 	"\nGrappling: " + str(grapple_hook.grappling) + \
 	"\nAnimation: " + animation_player.current_animation
@@ -102,7 +100,7 @@ func _physics_process(delta: float) -> void:
 		var target_velocity = target_speed * Vector3(direction.x, 0, direction.z)
 		velocity.x = move_toward(velocity.x, target_velocity.x, 0.75)
 		velocity.z = move_toward(velocity.z, target_velocity.z, 0.75)
-		if on_ice:
+		if ice_path.on_ice:
 			var vel = get_real_velocity()
 			var ice_speed_multiplier = 1.0 + 0.01 * direction.normalized().dot(vel.normalized())
 			velocity = ice_speed_multiplier * vel
@@ -144,14 +142,6 @@ func _physics_process(delta: float) -> void:
 	if Input.is_action_just_pressed("fireball"):
 		shoot(fireball_scene)
 	
-	if Input.is_action_pressed("ice_path"):
-		if raycast.is_colliding():
-			if not raycast.get_collider() is IceBlock:
-				place_ice()
-	
-	if Input.is_action_just_pressed("repulse"):
-		handle_repulsor()
-	
 	if Input.is_action_just_pressed("die"):
 		die()
 	
@@ -171,7 +161,8 @@ func _physics_process(delta: float) -> void:
 			elif not animation_player.is_playing():
 				animation_player.play("Idle")
 	
-	if grappling:
+	if grapple_hook.grappling:
+		velocity = Vector3.ZERO
 		global_position = grapple_hook.swing_node.global_position - center_of_mass.position
 		if Input.is_action_just_pressed("jump"):
 			grapple_hook.stop_grapple()
@@ -192,7 +183,7 @@ func handle_camera_rotation() ->void:
 	mouse_motion = Vector2.ZERO
 
 func jump() -> void:
-	if is_on_floor() or grappling:
+	if is_on_floor() or grapple_hook.grappling:
 			velocity.y = sqrt(jump_height * 2 * gravity)
 			double_jumps_left = double_jump_count
 	elif double_jumps_left > 0:
@@ -202,21 +193,6 @@ func jump() -> void:
 func stop_dash() -> void:
 	air_dash = false
 
-func place_ice() -> void:
-	var normal = raycast.get_collision_normal()
-	if normal.y <= 0:
-		return
-	var point = raycast.get_collision_point()
-	var local_point = to_local(point)
-	#Needed for proper rotation
-	var up = Vector3.RIGHT if normal == Vector3.UP else Vector3.UP
-	var new_iceblock = iceblock_scene.instantiate()
-	new_iceblock.position = local_point
-	if crouching:
-		new_iceblock.scale.y = 2
-	add_child(new_iceblock)
-	new_iceblock.look_at(point+normal, up)
-
 func shoot(scene: PackedScene) -> void:
 	var proj = scene.instantiate()
 	var dir = -cam.global_basis.z
@@ -225,16 +201,6 @@ func shoot(scene: PackedScene) -> void:
 	add_child(proj)
 	proj.global_position = cam.global_position + dir
 	proj.direction = dir
-
-func handle_repulsor() -> void:
-	if not repulsor_out:
-			repulsor_out = true
-			shoot(repulsor_scene)
-	else:
-		for c in get_children():
-			if c is Repulsor:
-				c.explode(self)
-		repulsor_out = false
 
 func die() -> void:
 	Global.first_load = false
