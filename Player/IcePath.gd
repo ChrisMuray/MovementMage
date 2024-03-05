@@ -22,19 +22,25 @@ var cooling := false:
 			cooling = false
 
 @onready var player: Player = get_parent()
-
+@onready var spray_sound: AudioStreamPlayer = $Ice_path_spray
+@onready var ice_chime: AudioStreamPlayer = $Ice_path_use
 func _physics_process(delta: float) -> void:
 	if cooling: return
+	
 	if Input.is_action_pressed("ice_path"):
 		player.gui.ice_bar.progress -= delta / use_time
+		
+		
 		if player.gui.ice_bar.progress == 0:
 			cooling = true
+			spray_sound.stop()
 		elif player.raycast.is_colliding() and \
 		not player.raycast.get_collider() is IceBlock:
 			place_ice()
+			
 	else:
 		player.gui.ice_bar.progress += delta / replenish_time
-
+	ice_sound()
 func place_ice() -> void:
 	var normal = player.raycast.get_collision_normal()
 	if normal.y <= 0: # Can't place ice on ceiling
@@ -47,3 +53,12 @@ func place_ice() -> void:
 	add_child(new_iceblock)
 	new_iceblock.global_position = point
 	new_iceblock.look_at(point+normal, up)
+	
+func ice_sound() -> void:
+	if Input.is_action_just_pressed("ice_path"):
+		ice_chime.play()
+		spray_sound.play(4.0 - 4.0*player.gui.ice_bar.progress)
+			
+		
+	elif Input.is_action_just_released("ice_path"):
+		spray_sound.stop()
