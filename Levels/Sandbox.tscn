@@ -1,11 +1,13 @@
-[gd_scene load_steps=16 format=3 uid="uid://hfd6aam6qf82"]
+[gd_scene load_steps=18 format=3 uid="uid://hfd6aam6qf82"]
 
 [ext_resource type="Texture2D" uid="uid://mebohubes5gy" path="res://Assets/kenney_prototype-textures/PNG/Dark/texture_01.png" id="1_qrte1"]
 [ext_resource type="Texture2D" uid="uid://cpcfu2wrutxju" path="res://Assets/AllSkyFree_Skyboxes/Epic_BlueSunset_EquiRect_flat.png" id="1_y53yd"]
 [ext_resource type="Material" uid="uid://4iu8bel5fm45" path="res://Assets/Materials/SandboxBlock.tres" id="2_2lqfv"]
 [ext_resource type="Material" uid="uid://dxyg365ffw3cb" path="res://Assets/Materials/StoneMaterial.tres" id="2_3p5fy"]
+[ext_resource type="Material" uid="uid://c4bf4cbnrj8be" path="res://materials/iced.tres" id="3_2xjb8"]
 [ext_resource type="PackedScene" uid="uid://xj4im0umqm43" path="res://Player/Player.tscn" id="3_oomu2"]
 [ext_resource type="PackedScene" uid="uid://desdlvedi7xdk" path="res://Sign/Sign.tscn" id="4_nj5mg"]
+[ext_resource type="Material" uid="uid://dvdogif14jjx8" path="res://materials/roc.tres" id="5_2pdme"]
 [ext_resource type="PackedScene" uid="uid://11evrbotevy7" path="res://Checkpoint/Checkpoint.tscn" id="6_avy1i"]
 
 [sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_hltt3"]
@@ -17,9 +19,7 @@ sky_material = SubResource("PanoramaSkyMaterial_hltt3")
 [sub_resource type="Environment" id="Environment_viek2"]
 background_mode = 2
 sky = SubResource("Sky_d25uv")
-reflected_light_source = 1
 tonemap_mode = 2
-glow_enabled = true
 volumetric_fog_density = 0.02
 volumetric_fog_albedo = Color(0.886275, 0.521569, 0, 1)
 
@@ -27,6 +27,7 @@ volumetric_fog_albedo = Color(0.886275, 0.521569, 0, 1)
 size = Vector3(200, 1, 200)
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ucw30"]
+next_pass = ExtResource("3_2xjb8")
 albedo_texture = ExtResource("1_qrte1")
 uv1_triplanar = true
 uv1_world_triplanar = true
@@ -75,7 +76,7 @@ size = Vector3(10, 8.97284, 17.9951)
 material = ExtResource("2_3p5fy")
 
 [node name="Block8" type="CSGBox3D" parent="Blocks"]
-transform = Transform3D(0.662006, 0, 0.749499, 0, 1, 0, -0.749499, 0, 0.662006, 1.33135, 6.14895, -11.5947)
+transform = Transform3D(0.662004, -0.00242601, 0.749497, 0.00160603, 0.999997, 0.00181829, -0.749499, 0, 0.662006, 1.33135, 6.14895, -2.38528)
 material_override = ExtResource("2_2lqfv")
 use_collision = true
 size = Vector3(5.60986, 12.2979, 6.47704)
@@ -90,7 +91,7 @@ material = ExtResource("2_3p5fy")
 
 [node name="Block2" type="CSGBox3D" parent="Blocks"]
 transform = Transform3D(0.150467, -0.255872, 0.954929, 0, 0.965926, 0.258819, -0.988615, -0.0389437, 0.14534, -20.2381, 0.825239, -14.8957)
-material_override = ExtResource("2_2lqfv")
+material_override = ExtResource("5_2pdme")
 use_collision = true
 size = Vector3(8.56885, 5, 25)
 material = ExtResource("2_3p5fy")
@@ -125,7 +126,7 @@ material = ExtResource("2_3p5fy")
 
 [node name="Player" parent="." instance=ExtResource("3_oomu2")]
 transform = Transform3D(-0.712394, 0, -0.70178, 0, 1, 0, 0.70178, 0, -0.712394, -38.5321, 0.253113, -23.5708)
-cam_sensitivity = 10.0
+cam_sensitivity = 2.0
 
 [node name="Camera3D" type="Camera3D" parent="."]
 transform = Transform3D(0.258819, 0, -0.965926, 0, 1, 0, 0.965926, 0, 0.258819, 18, 5, 0)

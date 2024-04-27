@@ -31,6 +31,7 @@ grow_vertical = 2
 script = ExtResource("1_bagrt")
 
 [node name="BlurTextureRect" type="TextureRect" parent="."]
+visible = false
 material = SubResource("ShaderMaterial_hue6c")
 custom_minimum_size = Vector2(100, 100)
 layout_mode = 1

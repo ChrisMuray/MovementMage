@@ -1,13 +1,44 @@
-extends Area3D
-class_name IceBlock
+extends Node3D
+class_name IceBlock2
 
-func _on_timer_timeout() -> void:
-	queue_free()
+@onready var collider = $Area3D/CollisionShape3D
+@onready var meshInstance = $MeshInstance3D
 
+@export var sizeCurve: Curve
+@export var iceShader: ShaderMaterial
+
+var lifetime := 3.0
+var spawnTime := 0.0
+var maxSize := 2.0
+
+var size := 0.0
+
+func _ready():
+	spawnTime = Time.get_ticks_msec() / 1000.0
+	position = Vector3(0, -100, 0)
+
+func _process(_delta):
+	pass
+
+func rePlace(pos: Vector3):
+	position = pos
+	spawnTime = Time.get_ticks_msec() / 1000.0
+
+func _physics_process(_delta):
+	var aliveTime := Time.get_ticks_msec() / 1000.0 - spawnTime
+
+	if aliveTime > lifetime:
+		position = Vector3(0, -100, 0)
+		return
+
+	size = sizeCurve.sample(aliveTime / lifetime)
+	collider.shape.radius = size * maxSize
+	meshInstance.scale = Vector3(size, size, size)
+	
 func _on_body_entered(body: Node3D) -> void:
 	if body is Player:
-		body.ice_path.ice_num += 1
+		body.icePathAbility.numIcesTouchingPlayer += 1
 
 func _on_body_exited(body: Node3D) -> void:
 	if body is Player:
-		body.ice_path.ice_num -= 1
+		body.icePathAbility.numIcesTouchingPlayer -= 1

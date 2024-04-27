@@ -41,14 +41,22 @@ func initialize_grapple_hook() -> void:
 		Vector2(0.05, 0.05),
 		Vector2(0.05, -0.05)
 	])
+
+	# halve its opacity
+	grapple_shape.material_override = StandardMaterial3D.new()
+	grapple_shape.material_override.albedo_color = Color(0, 1, 0, 0.15)
+	grapple_shape.material_override.flags_unshaded = true
+	grapple_shape.material_override.flags_transparent = true
+	grapple_shape.material_override.flags_do_not_receive_shadows = true
+
 	grapple_shape.mode = CSGPolygon3D.MODE_PATH
 	grapple_shape.path_local = true
 	grapple_shape.set_path_node(get_path())
 	add_child(grapple_shape)
 
 func start_grapple(point: Vector3) -> void:
-	if point.y < player.center_of_mass.global_position.y:
-		return
+	# if point.y < player.center_of_mass.global_position.y:
+	# 	return
 	
 	grappling = true
 	grapple_point = point
@@ -67,7 +75,7 @@ func start_grapple(point: Vector3) -> void:
 func stop_grapple() -> void:
 	grappling = false
 	if joint: joint.queue_free()
-	player.velocity = 1.5 * swing_node.linear_velocity
+	player.velocity = 1.0 * swing_node.linear_velocity
 
 func grapple() -> void:
 	curve.set_point_position(0, Vector3.ZERO)
