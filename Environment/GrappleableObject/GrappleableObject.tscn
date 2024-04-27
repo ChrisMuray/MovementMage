@@ -1,0 +1,29 @@
+[gd_scene load_steps=5 format=3 uid="uid://b1q72wxwam1pw"]
+
+[ext_resource type="Script" path="res://Environment/GrappleableObject/GrappleableObject.gd" id="1_dc46h"]
+
+[sub_resource type="SphereMesh" id="SphereMesh_j4j30"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_oq0q7"]
+albedo_color = Color(0.956863, 0.266667, 0, 1)
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_s4k4g"]
+radius = 5.0
+
+[node name="GrappleableObject" type="Area3D"]
+collision_layer = 4
+collision_mask = 4
+script = ExtResource("1_dc46h")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+mesh = SubResource("SphereMesh_j4j30")
+surface_material_override/0 = SubResource("StandardMaterial3D_oq0q7")
+
+[node name="Label3D" type="Label3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.770546, 0)
+visible = false
+billboard = 1
+text = "OKKKK"
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("SphereShape3D_s4k4g")

@@ -36,7 +36,7 @@ var first_person := true:
 @onready var raycast: RayCast3D = $CameraPivot/Camera3D/Raycast3D
 @onready var info_label: Label = $InfoLabel
 @onready var center_of_mass: Node3D = $CenterOfMass
-@onready var grapple_hook: Path3D = $GrappleHook
+# @onready var grapple_hook: Path3D = $GrappleHook
 @onready var animation_player: AnimationPlayer = $CameraPivot/Camera3D/Arms/AnimationPlayer
 @onready var collider: CollisionShape3D = $CollisionShape3D
 @onready var arm_viewport: SubViewportContainer = $ArmViewport
@@ -140,14 +140,7 @@ func _physics_process(delta: float) -> void:
 			elif not animation_player.is_playing():
 				animation_player.play("Idle")
 	
-	if grapple_hook.grappling:
-		velocity = Vector3.ZERO
-		global_position = grapple_hook.swing_node.global_position - center_of_mass.position
-		if Input.is_action_just_pressed("jump"):
-			grapple_hook.stop_grapple()
-			jump()
-	else:
-		move_and_slide()
+	move_and_slide()
 
 func _input(event: InputEvent) -> void:
 	if event is InputEventMouseMotion:
@@ -162,7 +155,7 @@ func handle_camera_rotation() ->void:
 	mouse_motion = Vector2.ZERO
 
 func jump() -> void:
-	if is_on_floor() or grapple_hook.grappling:
+	if is_on_floor():
 			velocity.y = sqrt(jump_height * 2 * gravity)
 
 func shoot(scene: PackedScene) -> void:

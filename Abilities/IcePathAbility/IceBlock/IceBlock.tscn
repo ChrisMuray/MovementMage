@@ -1,7 +1,7 @@
 [gd_scene load_steps=6 format=3 uid="uid://6syi5p20o6g2"]
 
-[ext_resource type="Script" path="res://Abilities/IceBlock/IceBlock.gd" id="1_i5qre"]
-[ext_resource type="Curve" uid="uid://dk2lds2fdl233" path="res://Abilities/IceBlock/IceSizeCurve.tres" id="2_w82uc"]
+[ext_resource type="Script" path="res://Abilities/IcePathAbility/IceBlock/IceBlock.gd" id="1_i5qre"]
+[ext_resource type="Curve" uid="uid://dk2lds2fdl233" path="res://Abilities/IcePathAbility/IceBlock/IceSizeCurve.tres" id="2_w82uc"]
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_st2vk"]
 radius = 2.0

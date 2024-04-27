@@ -1,5 +1,5 @@
 extends Node
-class_name IcePath2
+class_name IcePathAbility
 
 var icedShader: ShaderMaterial = preload("res://materials/iced.tres")
 
@@ -18,7 +18,7 @@ var numIcesTouchingPlayer := 0
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	for i in range(numIces):
-		var ice = load("res://Abilities/IceBlock/IceBlock.tscn").instantiate()
+		var ice = load("res://Abilities/IcePathAbility/IceBlock/IceBlock.tscn").instantiate()
 		add_child(ice)
 		ices.append(ice)
 
@@ -48,5 +48,5 @@ func _process(_delta):
 func _physics_process(_delta):
 	if Input.is_action_pressed("ice_path"):
 		if player.raycast.is_colliding() and \
-		not player.raycast.get_collider() is IceBlock2:
+		not player.raycast.get_collider() is IceBlock:
 			placeIce(player.raycast.get_collision_point())

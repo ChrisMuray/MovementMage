@@ -1,5 +1,5 @@
 extends Node3D
-class_name IceBlock2
+class_name IceBlock
 
 @onready var collider = $Area3D/CollisionShape3D
 @onready var meshInstance = $MeshInstance3D
@@ -9,7 +9,7 @@ class_name IceBlock2
 
 var lifetime := 3.0
 var spawnTime := 0.0
-var maxSize := 2.0
+var maxSize := 4.0
 
 var size := 0.0
 

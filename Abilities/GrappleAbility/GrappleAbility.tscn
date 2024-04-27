@@ -1,0 +1,18 @@
+[gd_scene load_steps=3 format=3 uid="uid://cijbxlo22aekd"]
+
+[ext_resource type="Script" path="res://Abilities/GrappleAbility/GrappleAbility.gd" id="1_oybg6"]
+
+[sub_resource type="Curve3D" id="Curve3D_7rdt2"]
+
+[node name="GrappleAbility" type="Node3D"]
+script = ExtResource("1_oybg6")
+
+[node name="RayCast" type="RayCast3D" parent="."]
+target_position = Vector3(2.08165e-12, 2.08165e-12, -28)
+collision_mask = 4
+hit_back_faces = false
+collide_with_areas = true
+collide_with_bodies = false
+
+[node name="GrapplePath" type="Path3D" parent="."]
+curve = SubResource("Curve3D_7rdt2")

@@ -3,12 +3,12 @@
 [ext_resource type="Script" path="res://Player/Player.gd" id="1_dgsno"]
 [ext_resource type="PackedScene" uid="uid://ditllddlclp58" path="res://Abilities/Fireball/Fireball.tscn" id="3_lujqw"]
 [ext_resource type="PackedScene" uid="uid://10fnp841kyh0" path="res://Abilities/Repulsor/Repulsor.tscn" id="4_hgjck"]
+[ext_resource type="PackedScene" uid="uid://cijbxlo22aekd" path="res://Abilities/GrappleAbility/GrappleAbility.tscn" id="4_sp583"]
 [ext_resource type="PackedScene" uid="uid://vyws3rynag82" path="res://UI/StartMenu.tscn" id="7_tkjxb"]
 [ext_resource type="PackedScene" uid="uid://d0s3wpnpk3edg" path="res://Assets/Models/Mage.glb" id="8_fecxb"]
 [ext_resource type="PackedScene" uid="uid://ctsn12omgsav2" path="res://UI/GUI.tscn" id="8_syr4s"]
-[ext_resource type="Script" path="res://Abilities/IceBlock/IcePathAbility.gd" id="9_fbuvs"]
+[ext_resource type="Script" path="res://Abilities/IcePathAbility/IcePathAbility.gd" id="9_fbuvs"]
 [ext_resource type="Script" path="res://Player/Repulse.gd" id="10_lhiaj"]
-[ext_resource type="PackedScene" uid="uid://ei8us77jw750" path="res://Abilities/GrappleHook/GrappleHook.tscn" id="13_j58rf"]
 
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_nppyd"]
 
@@ -145,6 +145,7 @@ layers = 4
 mesh = SubResource("BoxMesh_asw78")
 
 [node name="Raycast3D" type="RayCast3D" parent="CameraPivot/Camera3D"]
+visible = false
 target_position = Vector3(0, 0, -20)
 hit_back_faces = false
 collide_with_areas = true
@@ -155,8 +156,7 @@ transform = Transform3D(1, -3.48787e-16, 3.48787e-16, 3.48787e-16, 1, -3.48787e-
 [node name="RemoteTransform3D" type="RemoteTransform3D" parent="CameraPivot/Camera3D"]
 remote_path = NodePath("../../../ArmViewport/SubViewport/ArmsCamera")
 
-[node name="GrappleHook" parent="." instance=ExtResource("13_j58rf")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+[node name="GrappleAbility" parent="CameraPivot" instance=ExtResource("4_sp583")]
 
 [node name="Repulse" type="Node" parent="."]
 script = ExtResource("10_lhiaj")
