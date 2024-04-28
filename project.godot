@@ -23,6 +23,10 @@ Global="*res://Global.gd"
 
 movie_writer/movie_file="C:/Users/cmuray/Godot/MovementMage/clip.avi"
 
+[filesystem]
+
+import/fbx/enabled=false
+
 [input]
 
 move_left={

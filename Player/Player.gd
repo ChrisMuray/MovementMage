@@ -161,10 +161,12 @@ func jump() -> void:
 func shoot(scene: PackedScene) -> void:
 	var proj = scene.instantiate()
 	var dir = -cam.global_basis.z
+	var offset = cam.global_basis.x
 
 	add_child(proj)
-	proj.global_position = cam.global_position + dir
+	proj.global_position = cam.global_position + offset + dir
 	proj.direction = dir
+	proj.look_at(proj.global_position - dir)
 
 func die() -> void:
 	Global.first_load = false
