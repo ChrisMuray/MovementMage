@@ -11,7 +11,8 @@ class_name Player extends CharacterBody3D
 @export var air_control_directionality := 0.0
 @export var jump_height := 1.5
 @export var double_jump_count := 1
-@export var fall_multiplier := 3.0
+@export var gravity_multiplier := 1.75
+@export var fall_multiplier := 2.0
 
 @export var dash_strength := 20.0
 
@@ -19,7 +20,7 @@ class_name Player extends CharacterBody3D
 @export var fireball_scene: PackedScene
 
 # Get the gravity from the project settings to be synced with RigidBody nodes.
-var gravity: float = ProjectSettings.get_setting("physics/3d/default_gravity")
+var gravity: float = ProjectSettings.get_setting("physics/3d/default_gravity") * gravity_multiplier
 var mouse_motion := Vector2.ZERO
 var first_person := true:
 	set(val):
