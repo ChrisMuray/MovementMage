@@ -7,17 +7,13 @@ const hoveredMaterial: Material = preload("res://Environment/GrappleableObject/G
 @onready var collisionShapeNode: CollisionShape3D = $CollisionShape3D
 
 var isLookedAt: bool = false
+
+# the hitbox size gets bigger if the object is looked at.
+# this makes it harder to accidentally lose focus on the target.
 const lookAtScaleFactor: float = 1.4
 
-# Called when the node enters the scene tree for the first time.
-func _ready():
-	pass # Replace with function body.
-
-
-# Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(_delta):
 	pass
-
 
 func on_look_at():
 	isLookedAt = true

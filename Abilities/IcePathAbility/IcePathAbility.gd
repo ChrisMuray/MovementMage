@@ -1,3 +1,5 @@
+@icon("res://icon.svg") # sets the icon
+
 extends Node
 class_name IcePathAbility
 

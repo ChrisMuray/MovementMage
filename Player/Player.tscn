@@ -36,11 +36,15 @@ fireball_scene = ExtResource("3_lujqw")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+visible = false
 mesh = SubResource("CapsuleMesh_nppyd")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
 shape = SubResource("CapsuleShape3D_46n6l")
+
+[node name="IcePathAbility" type="Node" parent="."]
+script = ExtResource("9_fbuvs")
 
 [node name="CameraPivot" type="Node3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 0)
@@ -51,7 +55,6 @@ current = true
 
 [node name="Arms" parent="CameraPivot/Camera3D" instance=ExtResource("8_fecxb")]
 transform = Transform3D(-0.5, 0, -7.54979e-08, 0, 0.5, 0, 7.54979e-08, 0, -0.5, 0, -0.807, 0)
-visible = false
 
 [node name="Skeleton3D" parent="CameraPivot/Camera3D/Arms/Armature" index="0"]
 bones/1/rotation = Quaternion(0.112512, -0.086836, 0.979106, -0.145439)
@@ -193,9 +196,6 @@ cull_mask = 2
 
 [node name="StartMenu" parent="." instance=ExtResource("7_tkjxb")]
 visible = false
-
-[node name="IcePathAbility" type="Node" parent="."]
-script = ExtResource("9_fbuvs")
 
 [editable path="CameraPivot/Camera3D/Arms"]
 [editable path="GUI"]

@@ -1,4 +1,8 @@
+@icon("res://icon.svg") # sets the icon
+
 extends Node3D
+
+const grappleProgressCurve = preload("res://Abilities/GrappleAbility/GrappleProgressCurve.tres")
 
 @onready var rayCastNode: RayCast3D = $RayCast
 @onready var pathNode: Path3D = $GrapplePath
@@ -8,6 +12,9 @@ var lookedAtNode: GrappleableObject = null
 var grappledNode: GrappleableObject = null
 var isGrappling: bool = false
 
+const grappleReachSpeed: float = 3.0
+var grappleReachProgress: float = 0.0
+
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	initGrapple()
@@ -15,8 +22,11 @@ func _ready():
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(_delta):
 	if isGrappling:
-		pathNode.curve.set_point_position(0, to_local(global_transform.origin - Vector3(0, 0.5, 0)))
-		pathNode.curve.set_point_position(1, to_local(grappledNode.global_transform.origin))
+		var startPoint = to_local(global_transform.origin - Vector3(0, 0.5, 0))
+		var endPoint = to_local(grappledNode.global_transform.origin)
+		var dist = grappleProgressCurve.sample(grappleReachProgress)
+		pathNode.curve.set_point_position(0, startPoint)
+		pathNode.curve.set_point_position(1, startPoint + (endPoint - startPoint) * dist)
 
 func _physics_process(delta):
 	if isGrappling:
@@ -72,18 +82,24 @@ func startGrapple():
 	if lookedAtNode != null:
 		grappledNode = lookedAtNode
 		isGrappling = true
+		grappleReachProgress = 0.0
 
 func endGrapple():
 	if lookedAtNode != null:
 		pathNode.curve.set_point_position(1, Vector3.ZERO)
 		isGrappling = false
+		grappleReachProgress = 0.0
 
 func updateGrapple(delta):
 	if isGrappling:
-		# apply playerphysics
-		var offset = (grappledNode.global_transform.origin - global_transform.origin)
-		var direction = offset.normalized()
-		var strength = clampf(offset.length() - 3, 0, 100)
+		if grappleReachProgress >= 1.0:
+			grappleReachProgress = 1.0
+			# apply playerphysics
+			var offset = (grappledNode.global_transform.origin - global_transform.origin)
+			var direction = offset.normalized()
+			var strength = clampf(offset.length() - 3, 0, 100)
 
-		player.velocity += direction * strength * 20 * delta
-		player.velocity += Vector3(0, -5, 0) * delta # reduce gravity
+			player.velocity += direction * strength * 20 * delta
+			player.velocity += Vector3(0, -5, 0) * delta # reduce gravity
+		else:
+			grappleReachProgress += delta * grappleReachSpeed;
