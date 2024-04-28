@@ -4,14 +4,14 @@ class_name Player extends CharacterBody3D
 @export var cam_sensitivity := 2.0
 
 # Movement parameters
-@export var walking_speed := 10.0
-@export var max_ground_speed := 25.0
+@export var walking_speed := 8.0
+@export var max_ground_speed := 20.0
 @export var max_air_speed := 30.0
 @export var air_control := 0.05
 @export var air_control_directionality := 0.0
-@export var jump_height := 2.0
+@export var jump_height := 1.5
 @export var double_jump_count := 1
-@export var fall_multiplier := 2.0
+@export var fall_multiplier := 3.0
 
 @export var dash_strength := 20.0
 
