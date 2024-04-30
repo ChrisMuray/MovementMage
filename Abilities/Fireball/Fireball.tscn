@@ -1,16 +1,7 @@
-[gd_scene load_steps=5 format=3 uid="uid://ditllddlclp58"]
+[gd_scene load_steps=4 format=3 uid="uid://ditllddlclp58"]
 
 [ext_resource type="Script" path="res://Abilities/Fireball/Fireball.gd" id="1_crxh2"]
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_uajj5"]
-albedo_color = Color(1, 0.317647, 0, 1)
-emission_enabled = true
-emission = Color(1, 0.317647, 0, 1)
-emission_energy_multiplier = 3.01
-
-[sub_resource type="SphereMesh" id="SphereMesh_ibe1m"]
-radius = 0.3
-height = 0.6
+[ext_resource type="PackedScene" uid="uid://dnlnpl5mgps5m" path="res://Assets/Models/Abilities/Fireball_Static.glb" id="2_ptelc"]
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_6o0m5"]
 radius = 0.3
@@ -19,10 +10,6 @@ radius = 0.3
 top_level = true
 script = ExtResource("1_crxh2")
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
-material_override = SubResource("StandardMaterial3D_uajj5")
-mesh = SubResource("SphereMesh_ibe1m")
-
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 shape = SubResource("SphereShape3D_6o0m5")
 
@@ -30,6 +17,8 @@ shape = SubResource("SphereShape3D_6o0m5")
 wait_time = 10.0
 one_shot = true
 autostart = true
+
+[node name="Fireball_Static" parent="." instance=ExtResource("2_ptelc")]
 
 [connection signal="body_entered" from="." to="." method="_on_body_entered"]
 [connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]

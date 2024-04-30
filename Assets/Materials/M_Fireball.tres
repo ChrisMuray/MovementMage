@@ -1,0 +1,17 @@
+[gd_resource type="ShaderMaterial" load_steps=5 format=3 uid="uid://dxm0e0iq7qrir"]
+
+[ext_resource type="Shader" path="res://Assets/Materials/Shaders/FireballShader.gdshader" id="1_7dxd5"]
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_0dqc2"]
+load_path = "res://.godot/imported/Fire.png-c0e0e31f7913f48ed29c616271607693.s3tc.ctex"
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_h6nrj"]
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_g5dq8"]
+noise = SubResource("FastNoiseLite_h6nrj")
+
+[resource]
+render_priority = 0
+shader = ExtResource("1_7dxd5")
+shader_parameter/albedo_texture = SubResource("CompressedTexture2D_0dqc2")
+shader_parameter/noise_texture = SubResource("NoiseTexture2D_g5dq8")

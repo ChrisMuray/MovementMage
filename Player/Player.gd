@@ -4,13 +4,14 @@ class_name Player extends CharacterBody3D
 @export var cam_sensitivity := 2.0
 
 # Movement parameters
-@export var walking_speed := 10.0
-@export var max_ground_speed := 25.0
+@export var walking_speed := 8.0
+@export var max_ground_speed := 20.0
 @export var max_air_speed := 30.0
 @export var air_control := 0.05
 @export var air_control_directionality := 0.0
-@export var jump_height := 2.0
+@export var jump_height := 1.5
 @export var double_jump_count := 1
+@export var gravity_multiplier := 1.75
 @export var fall_multiplier := 2.0
 
 @export var dash_strength := 20.0
@@ -19,7 +20,7 @@ class_name Player extends CharacterBody3D
 @export var fireball_scene: PackedScene
 
 # Get the gravity from the project settings to be synced with RigidBody nodes.
-var gravity: float = ProjectSettings.get_setting("physics/3d/default_gravity")
+var gravity: float = ProjectSettings.get_setting("physics/3d/default_gravity") * gravity_multiplier
 var mouse_motion := Vector2.ZERO
 var first_person := true:
 	set(val):
@@ -161,10 +162,12 @@ func jump() -> void:
 func shoot(scene: PackedScene) -> void:
 	var proj = scene.instantiate()
 	var dir = -cam.global_basis.z
+	var offset = cam.global_basis.x
 
 	add_child(proj)
-	proj.global_position = cam.global_position + dir
+	proj.global_position = cam.global_position + offset + dir
 	proj.direction = dir
+	proj.look_at(proj.global_position - dir)
 
 func die() -> void:
 	Global.first_load = false
