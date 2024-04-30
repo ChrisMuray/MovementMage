@@ -1,6 +1,6 @@
 [gd_resource type="StandardMaterial3D" load_steps=5 format=3 uid="uid://dvdogif14jjx8"]
 
-[ext_resource type="Material" uid="uid://c4bf4cbnrj8be" path="res://Materials/iced.tres" id="1_vojnm"]
+[ext_resource type="Material" uid="uid://c4bf4cbnrj8be" path="res://Abilities/IcePathAbility/iced.tres" id="1_vojnm"]
 
 [sub_resource type="Gradient" id="Gradient_u5opq"]
 offsets = PackedFloat32Array(0, 0.331158, 0.357259, 0.659054, 0.693312)

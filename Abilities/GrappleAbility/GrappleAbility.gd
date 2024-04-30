@@ -5,7 +5,8 @@ extends Node3D
 const grappleProgressCurve = preload("res://Abilities/GrappleAbility/GrappleProgressCurve.tres")
 
 @onready var pathNode: Path3D = $GrapplePath
-@onready var player: Player = get_parent().get_parent() # LOL
+@onready var player: Player = get_parent().get_parent()
+@onready var cameraNode: Camera3D = get_node("../../CameraPivot/Camera3D")
 @onready var rayCastNode: RayCast3D = get_node("../../CameraPivot/Camera3D/Raycast3D")
 
 var lookedAtNode: GrappleableObject = null
@@ -22,7 +23,8 @@ func _ready():
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(_delta):
 	if isGrappling:
-		var startPoint = to_local(player.global_transform.origin)
+		var wandPos = cameraNode.to_global(Vector3(0.794, 0.189, -0.584))
+		var startPoint = to_local(wandPos)
 		var endPoint = to_local(grappledNode.global_transform.origin)
 		var dist = grappleProgressCurve.sample(grappleReachProgress)
 		pathNode.curve.set_point_position(0, startPoint)
@@ -40,7 +42,6 @@ func _physics_process(delta):
 		endGrapple()
 
 func checkLookedAtNode():
-	print(rayCastNode)
 	if rayCastNode and rayCastNode.is_colliding():
 		var collidedNode = rayCastNode.get_collider()
 		if collidedNode is GrappleableObject:

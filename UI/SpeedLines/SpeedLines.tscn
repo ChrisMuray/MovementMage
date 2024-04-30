@@ -1,0 +1,30 @@
+[gd_scene load_steps=6 format=3 uid="uid://s56i3xmvceh0"]
+
+[ext_resource type="Shader" path="res://UI/SpeedLines/speed_lines.gdshader" id="1_y5aj2"]
+[ext_resource type="Script" path="res://UI/SpeedLines/SpeedLines.gd" id="2_ygc4k"]
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_6vvim"]
+frequency = 0.1
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_afdqh"]
+noise = SubResource("FastNoiseLite_6vvim")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ie0tj"]
+shader = ExtResource("1_y5aj2")
+shader_parameter/line_color = Color(1, 1, 1, 1)
+shader_parameter/line_count = 2.0
+shader_parameter/line_density = 0.25
+shader_parameter/line_faloff = 0.469
+shader_parameter/mask_size = 0.243
+shader_parameter/mask_edge = 0.398
+shader_parameter/animation_speed = 20.0
+shader_parameter/noise = SubResource("NoiseTexture2D_afdqh")
+
+[node name="SpeedLines" type="ColorRect"]
+material = SubResource("ShaderMaterial_ie0tj")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("2_ygc4k")

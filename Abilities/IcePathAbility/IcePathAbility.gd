@@ -3,7 +3,8 @@
 extends Node
 class_name IcePathAbility
 
-var icedShader: ShaderMaterial = preload("res://materials/iced.tres")
+var icedShader: ShaderMaterial = preload("res://Abilities/IcePathAbility/iced.tres")
+var iceBlockTscn: PackedScene = preload("res://Abilities/IcePathAbility/IceBlock/IceBlock.tscn")
 
 var numIces := 50
 var ices := []
@@ -20,7 +21,7 @@ var numIcesTouchingPlayer := 0
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	for i in range(numIces):
-		var ice = load("res://Abilities/IcePathAbility/IceBlock/IceBlock.tscn").instantiate()
+		var ice = iceBlockTscn.instantiate()
 		add_child(ice)
 		ices.append(ice)
 
