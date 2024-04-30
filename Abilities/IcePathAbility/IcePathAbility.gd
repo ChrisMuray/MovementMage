@@ -15,7 +15,7 @@ var debounceCount := 1 # no debounce
 var numIcesTouchingPlayer := 0
 
 
-@onready var player: Player = get_parent()
+@onready var player: Player = get_parent().get_parent()
 
 # Called when the node enters the scene tree for the first time.
 func _ready():

@@ -4,9 +4,9 @@ extends Node3D
 
 const grappleProgressCurve = preload("res://Abilities/GrappleAbility/GrappleProgressCurve.tres")
 
-@onready var rayCastNode: RayCast3D = $RayCast
 @onready var pathNode: Path3D = $GrapplePath
 @onready var player: Player = get_parent().get_parent() # LOL
+@onready var rayCastNode: RayCast3D = get_node("../../CameraPivot/Camera3D/Raycast3D")
 
 var lookedAtNode: GrappleableObject = null
 var grappledNode: GrappleableObject = null
@@ -22,11 +22,11 @@ func _ready():
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(_delta):
 	if isGrappling:
-		var startPoint = to_local(global_transform.origin - Vector3(0, 0.5, 0))
+		var startPoint = to_local(player.global_transform.origin)
 		var endPoint = to_local(grappledNode.global_transform.origin)
 		var dist = grappleProgressCurve.sample(grappleReachProgress)
 		pathNode.curve.set_point_position(0, startPoint)
-		pathNode.curve.set_point_position(1, startPoint + (endPoint - startPoint) * dist)
+		pathNode.curve.set_point_position(1, startPoint.lerp(endPoint,dist))
 
 func _physics_process(delta):
 	if isGrappling:
@@ -40,7 +40,8 @@ func _physics_process(delta):
 		endGrapple()
 
 func checkLookedAtNode():
-	if rayCastNode.is_colliding():
+	print(rayCastNode)
+	if rayCastNode and rayCastNode.is_colliding():
 		var collidedNode = rayCastNode.get_collider()
 		if collidedNode is GrappleableObject:
 			if lookedAtNode != null: lookedAtNode.on_look_away()
@@ -53,7 +54,7 @@ func checkLookedAtNode():
 
 func initGrapple():
 	pathNode.curve = Curve3D.new()
-	pathNode.curve.add_point(Vector3(0, -1, 0))
+	pathNode.curve.add_point(Vector3.ZERO)
 	pathNode.curve.add_point(Vector3.ZERO)
 
 	var grapple_shape = CSGPolygon3D.new()
@@ -86,6 +87,7 @@ func startGrapple():
 
 func endGrapple():
 	if lookedAtNode != null:
+		pathNode.curve.set_point_position(0, Vector3.ZERO)
 		pathNode.curve.set_point_position(1, Vector3.ZERO)
 		isGrappling = false
 		grappleReachProgress = 0.0
@@ -95,7 +97,7 @@ func updateGrapple(delta):
 		if grappleReachProgress >= 1.0:
 			grappleReachProgress = 1.0
 			# apply playerphysics
-			var offset = (grappledNode.global_transform.origin - global_transform.origin)
+			var offset = (grappledNode.global_transform.origin - player.global_transform.origin)
 			var direction = offset.normalized()
 			var strength = clampf(offset.length() - 3, 0, 100)
 

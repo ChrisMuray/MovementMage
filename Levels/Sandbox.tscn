@@ -4,10 +4,10 @@
 [ext_resource type="Texture2D" uid="uid://cpcfu2wrutxju" path="res://Assets/AllSkyFree_Skyboxes/Epic_BlueSunset_EquiRect_flat.png" id="1_y53yd"]
 [ext_resource type="Material" uid="uid://4iu8bel5fm45" path="res://Assets/Materials/SandboxBlock.tres" id="2_2lqfv"]
 [ext_resource type="Material" uid="uid://dxyg365ffw3cb" path="res://Assets/Materials/StoneMaterial.tres" id="2_3p5fy"]
-[ext_resource type="Material" uid="uid://c4bf4cbnrj8be" path="res://materials/iced.tres" id="3_2xjb8"]
+[ext_resource type="Material" uid="uid://c4bf4cbnrj8be" path="res://Materials/iced.tres" id="3_2xjb8"]
 [ext_resource type="PackedScene" uid="uid://xj4im0umqm43" path="res://Player/Player.tscn" id="3_oomu2"]
 [ext_resource type="PackedScene" uid="uid://desdlvedi7xdk" path="res://Sign/Sign.tscn" id="4_nj5mg"]
-[ext_resource type="Material" uid="uid://dvdogif14jjx8" path="res://materials/roc.tres" id="5_2pdme"]
+[ext_resource type="Material" uid="uid://cy501a5tf7knu" path="res://Materials/rock/rock.tres" id="6_0exgp"]
 [ext_resource type="PackedScene" uid="uid://11evrbotevy7" path="res://Checkpoint/Checkpoint.tscn" id="6_avy1i"]
 [ext_resource type="PackedScene" uid="uid://b1q72wxwam1pw" path="res://Environment/GrappleableObject/GrappleableObject.tscn" id="9_g71o2"]
 [ext_resource type="Script" path="res://Levels/temporary.gd" id="11_nkefq"]
@@ -93,10 +93,9 @@ material = ExtResource("2_3p5fy")
 
 [node name="Block2" type="CSGBox3D" parent="Blocks"]
 transform = Transform3D(0.150467, -0.255872, 0.954929, 0, 0.965926, 0.258819, -0.988615, -0.0389437, 0.14534, -20.2381, 0.825239, -14.8957)
-material_override = ExtResource("5_2pdme")
 use_collision = true
 size = Vector3(8.56885, 5, 25)
-material = ExtResource("2_3p5fy")
+material = ExtResource("6_0exgp")
 
 [node name="Block3" type="CSGBox3D" parent="Blocks"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 15.8268, 25.4269, -9)
@@ -202,33 +201,35 @@ shape = SubResource("BoxShape3D_ovvj2")
 [node name="MeshInstance3D" type="MeshInstance3D" parent="RigidBody3D3"]
 mesh = SubResource("BoxMesh_ctvah")
 
-[node name="GrappleableObject3" parent="." instance=ExtResource("9_g71o2")]
-transform = Transform3D(1, 0, 6.77634e-09, 0, 1, 0, 3.83151e-09, 0, 1, -0.785015, 18.06, -35.022)
+[node name="Grappleables" type="Node3D" parent="."]
 
-[node name="GrappleableObject2" parent="." instance=ExtResource("9_g71o2")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10.5076, 9.02999, -38.2572)
-
-[node name="GrappleableObject" parent="." instance=ExtResource("9_g71o2")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.25294, 4.515, -21.8708)
-
-[node name="GrappleableObject4" parent="." instance=ExtResource("9_g71o2")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 18.7793, 19.6311, -28.2458)
-
-[node name="GrappleableObject5" parent="." instance=ExtResource("9_g71o2")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.16065, 11.165, -51.9422)
-
-[node name="cool ring" type="Node3D" parent="."]
+[node name="cool ring" type="Node3D" parent="Grappleables"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.7061, 14.829, 11.2188)
 script = ExtResource("11_nkefq")
 
-[node name="GrappleableObject4" parent="cool ring" instance=ExtResource("9_g71o2")]
+[node name="GrappleableObject4" parent="Grappleables/cool ring" instance=ExtResource("9_g71o2")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10, 2.08165e-12, 2.08165e-12)
 
-[node name="GrappleableObject3" parent="cool ring" instance=ExtResource("9_g71o2")]
+[node name="GrappleableObject3" parent="Grappleables/cool ring" instance=ExtResource("9_g71o2")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10, 2.08165e-12, 2.08165e-12)
 
-[node name="GrappleableObject2" parent="cool ring" instance=ExtResource("9_g71o2")]
+[node name="GrappleableObject2" parent="Grappleables/cool ring" instance=ExtResource("9_g71o2")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.08165e-12, 2.08165e-12, -10)
 
-[node name="GrappleableObject" parent="cool ring" instance=ExtResource("9_g71o2")]
+[node name="GrappleableObject" parent="Grappleables/cool ring" instance=ExtResource("9_g71o2")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.08165e-12, 2.08165e-12, 10)
+
+[node name="GrappleableObject3" parent="Grappleables" instance=ExtResource("9_g71o2")]
+transform = Transform3D(1, 0, 6.77634e-09, 0, 1, 0, 3.83151e-09, 0, 1, -0.785015, 18.06, -35.022)
+
+[node name="GrappleableObject2" parent="Grappleables" instance=ExtResource("9_g71o2")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10.5076, 9.02999, -38.2572)
+
+[node name="GrappleableObject" parent="Grappleables" instance=ExtResource("9_g71o2")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.25294, 4.515, -21.8708)
+
+[node name="GrappleableObject4" parent="Grappleables" instance=ExtResource("9_g71o2")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 18.7793, 19.6311, -28.2458)
+
+[node name="GrappleableObject5" parent="Grappleables" instance=ExtResource("9_g71o2")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.16065, 11.165, -51.9422)

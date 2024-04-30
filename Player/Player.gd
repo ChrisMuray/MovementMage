@@ -47,7 +47,7 @@ var render_debug_text = ""
 var physics_debug_text = ""
 
 @onready var repulse: Node = $Repulse
-@onready var icePathAbility: Node = $IcePathAbility
+@onready var icePathAbility: Node = $Abilities/IcePathAbility
 
 func _ready() -> void:
 	# Respawn point
@@ -66,7 +66,8 @@ func _physics_process(delta: float) -> void:
 	## DEBUG INFO
 	physics_debug_text = "Physics FPS: " + str(1.0/delta) + \
 	"\nSPEED: " + str(snapped(get_real_velocity().length(), 0.01)) + \
-	"\non ice: " + str(icePathAbility.onIce())
+	"\non ice: " + str(icePathAbility.onIce()) + \
+	"\non ground: " + str(is_on_floor())
 	
 	if Input.is_action_just_pressed("switch_cam"):
 		first_person = not first_person
