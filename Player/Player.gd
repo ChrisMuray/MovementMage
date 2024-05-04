@@ -62,13 +62,7 @@ func _process(delta: float) -> void:
 	if Input.mouse_mode == Input.MOUSE_MODE_CAPTURED:
 		handle_camera_rotation()
 
-func _physics_process(delta: float) -> void:
-	## DEBUG INFO
-	physics_debug_text = "Physics FPS: " + str(1.0/delta) + \
-	"\nSPEED: " + str(snapped(get_real_velocity().length(), 0.01)) + \
-	"\non ice: " + str(icePathAbility.onIce()) + \
-	"\non ground: " + str(is_on_floor())
-	
+func _physics_process(delta: float) -> void:	
 	if Input.is_action_just_pressed("switch_cam"):
 		first_person = not first_person
 			
@@ -83,14 +77,14 @@ func _physics_process(delta: float) -> void:
 	if is_on_floor(): # Ground movement logic
 		var target_speed = walking_speed if direction else 0.0
 		var target_velocity = target_speed * Vector3(direction.x, 0, direction.z)
+		var real_velocity = velocity # grab velocity before move_toward
 		velocity.x = move_toward(velocity.x, target_velocity.x, 0.75)
 		velocity.z = move_toward(velocity.z, target_velocity.z, 0.75)
 		if icePathAbility.onIce():
-			var vel = get_real_velocity()
-			var ice_speed_multiplier = 1.0 + 0.01 * direction.normalized().dot(vel.normalized())
-			velocity = ice_speed_multiplier * vel
+			var ice_speed_multiplier = 1.0 + 0.01 * direction.normalized().dot(real_velocity.normalized())
+			velocity = ice_speed_multiplier * real_velocity
 			# So player doesn't get stuck in the middle of ice
-			if vel == Vector3.ZERO:
+			if real_velocity == Vector3.ZERO:
 				velocity = direction
 		# Cap ground speed
 		velocity = velocity.limit_length(max_ground_speed)
@@ -114,7 +108,21 @@ func _physics_process(delta: float) -> void:
 	# Handle jump
 	if Input.is_action_just_pressed("jump"):
 		jump()
-	
+
+		## DEBUG INFO
+	physics_debug_text = "Physics FPS: " + str(1.0/delta) + \
+	"\nSPEED: " + str(snapped(get_real_velocity().length(), 0.01)) + \
+	"\non ice: " + str(icePathAbility.onIce()) + \
+	"\non ground: " + str(is_on_floor()) + \
+	"\nvelocity: " + str(velocity) + \
+	"\ndirection: " + str(direction)
+
+	move_and_slide()
+
+func _input(event: InputEvent) -> void:
+	if event is InputEventMouseMotion:
+		mouse_motion = -event.relative * 0.001
+		
 	## ABILITIES
 	if Input.is_action_just_pressed("fireball"):
 		shoot(fireball_scene)
@@ -141,12 +149,6 @@ func _physics_process(delta: float) -> void:
 				animation_player.play("Skill3")
 			elif not animation_player.is_playing():
 				animation_player.play("Idle")
-	
-	move_and_slide()
-
-func _input(event: InputEvent) -> void:
-	if event is InputEventMouseMotion:
-		mouse_motion = -event.relative * 0.001
 
 func handle_camera_rotation() ->void:
 	rotate_y(mouse_motion.x * cam_sensitivity)
