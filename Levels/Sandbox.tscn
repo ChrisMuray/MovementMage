@@ -7,7 +7,7 @@
 [ext_resource type="Material" uid="uid://c4bf4cbnrj8be" path="res://Abilities/IcePathAbility/iced.tres" id="3_2xjb8"]
 [ext_resource type="PackedScene" uid="uid://xj4im0umqm43" path="res://Player/Player.tscn" id="3_oomu2"]
 [ext_resource type="PackedScene" uid="uid://desdlvedi7xdk" path="res://Sign/Sign.tscn" id="4_nj5mg"]
-[ext_resource type="Material" path="res://materials/rock/rock.tres" id="6_0exgp"]
+[ext_resource type="Material" uid="uid://cy501a5tf7knu" path="res://materials/rock/rock.tres" id="6_0exgp"]
 [ext_resource type="PackedScene" uid="uid://11evrbotevy7" path="res://Checkpoint/Checkpoint.tscn" id="6_avy1i"]
 [ext_resource type="PackedScene" uid="uid://b1q72wxwam1pw" path="res://Environment/GrappleableObject/GrappleableObject.tscn" id="9_g71o2"]
 [ext_resource type="Script" path="res://Levels/temporary.gd" id="11_nkefq"]
