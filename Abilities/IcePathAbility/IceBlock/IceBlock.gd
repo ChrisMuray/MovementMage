@@ -1,17 +1,18 @@
 extends Node3D
 class_name IceBlock
 
+const sizeCurve := preload("./IceSizeCurve.tres")
 @onready var collider = $Area3D/CollisionShape3D
 @onready var meshInstance = $MeshInstance3D
-
-@export var sizeCurve: Curve
-@export var iceShader: ShaderMaterial
 
 var lifetime := 3.0
 var spawnTime := 0.0
 var maxSize := 4.0
-
 var size := 0.0
+
+func rePlace(pos: Vector3):
+	position = pos
+	spawnTime = Time.get_ticks_msec() / 1000.0
 
 func _ready():
 	spawnTime = Time.get_ticks_msec() / 1000.0
@@ -19,10 +20,6 @@ func _ready():
 
 func _process(_delta):
 	pass
-
-func rePlace(pos: Vector3):
-	position = pos
-	spawnTime = Time.get_ticks_msec() / 1000.0
 
 func _physics_process(_delta):
 	var aliveTime := Time.get_ticks_msec() / 1000.0 - spawnTime

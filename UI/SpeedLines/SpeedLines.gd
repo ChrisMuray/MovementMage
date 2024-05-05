@@ -1,22 +1,13 @@
 extends ColorRect
 
-@onready var playerNode := get_parent().get_parent()
+@export var maxLineDensity := 0.24 # maximum line density
+@export var minSpeed       := 10.0 # player speed at which lines begin to appear (roughly)
+@export var maxSpeed       := 35.0 # speed at which line density maxes out
 
-var lineDensity : float = 0.0
+@onready var playerNode := $"../../"
 
-# Called when the node enters the scene tree for the first time.
-func _ready():
-	pass # Replace with function body.
-
-
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta):
-	var playerVel = playerNode.velocity
-	var ratio = min(1.0, (playerVel.length() - 10) / 25.0)
-	material.set_shader_parameter("line_density", 0.24 * ratio)
+func _process(_delta):
+	var playerSpeed = playerNode.velocity.length()
+	var ratio = min(1.0, (playerSpeed - minSpeed) / (maxSpeed - minSpeed))
+	material.set_shader_parameter("line_density", maxLineDensity * ratio)
 	material.set_shader_parameter("line_color", Color(1.0, 1.0, 1.0, ratio))
-	
-
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _physics_process(_delta):
-	pass

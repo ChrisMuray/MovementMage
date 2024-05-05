@@ -6,15 +6,13 @@ class_name Player extends CharacterBody3D
 # Movement parameters
 @export var walking_speed := 8.0
 @export var max_ground_speed := 20.0
-@export var max_air_speed := 30.0
+@export var max_air_speed := 35.0
 @export var air_control := 0.05
 @export var air_control_directionality := 0.0
 @export var jump_height := 1.5
 @export var double_jump_count := 1
 @export var gravity_multiplier := 1.75
 @export var fall_multiplier := 2.0
-
-@export var dash_strength := 20.0
 
 # Ability scenes
 @export var fireball_scene: PackedScene
@@ -38,7 +36,7 @@ var first_person := true:
 @onready var info_label: Label = $InfoLabel
 @onready var center_of_mass: Node3D = $CenterOfMass
 # @onready var grapple_hook: Path3D = $GrappleHook
-@onready var animation_player: AnimationPlayer = $CameraPivot/Camera3D/Arms/AnimationPlayer
+@onready var animation_tree: AnimationTree = $AnimationTree
 @onready var collider: CollisionShape3D = $CollisionShape3D
 @onready var arm_viewport: SubViewportContainer = $ArmViewport
 @onready var gui: Control = $GUI
@@ -48,6 +46,8 @@ var physics_debug_text = ""
 
 @onready var repulse: Node = $Repulse
 @onready var icePathAbility: Node = $Abilities/IcePathAbility
+
+
 
 func _ready() -> void:
 	# Respawn point
@@ -78,8 +78,12 @@ func _physics_process(delta: float) -> void:
 		var target_speed = walking_speed if direction else 0.0
 		var target_velocity = target_speed * Vector3(direction.x, 0, direction.z)
 		var real_velocity = velocity # grab velocity before move_toward
-		velocity.x = move_toward(velocity.x, target_velocity.x, 0.75)
-		velocity.z = move_toward(velocity.z, target_velocity.z, 0.75)
+
+		var new_hv = hv.move_toward(target_velocity, 80 * delta)
+
+		velocity.x = new_hv.x
+		velocity.z = new_hv.z
+
 		if icePathAbility.onIce():
 			var ice_speed_multiplier = 1.0 + 0.01 * direction.normalized().dot(real_velocity.normalized())
 			velocity = ice_speed_multiplier * real_velocity
@@ -106,8 +110,9 @@ func _physics_process(delta: float) -> void:
 		velocity = velocity.limit_length(max_air_speed)
 	
 	# Handle jump
-	if Input.is_action_just_pressed("jump"):
-		jump()
+	if Input.is_action_pressed("jump"):
+		jump(direction)
+	
 
 		## DEBUG INFO
 	physics_debug_text = "Physics FPS: " + str(1.0/delta) + \
@@ -119,6 +124,9 @@ func _physics_process(delta: float) -> void:
 
 	move_and_slide()
 
+	var platform_rot = get_platform_angular_velocity()
+	rotate_y(delta * platform_rot.y)
+
 func _input(event: InputEvent) -> void:
 	if event is InputEventMouseMotion:
 		mouse_motion = -event.relative * 0.001
@@ -126,29 +134,10 @@ func _input(event: InputEvent) -> void:
 	## ABILITIES
 	if Input.is_action_just_pressed("fireball"):
 		shoot(fireball_scene)
-
-	if Input.is_action_just_pressed("air_dash"):
-		velocity = Vector3.ZERO
-		velocity = -cam.global_basis.z * dash_strength
 	
 	if Input.is_action_just_pressed("die"):
 		die()
-	
-	## ANIMATION
-	if is_on_floor():
-		if Input.is_action_pressed("ice_path"):
-			animation_player.play("Skill2Hold")
-		elif velocity.length() > 0:
-			animation_player.play("Run")
-		else:
-			if Input.is_action_just_pressed("1"):
-				animation_player.play("Skill1")
-			elif Input.is_action_pressed("2"):
-				animation_player.play("Skill2Hold")
-			elif Input.is_action_just_pressed("3"):
-				animation_player.play("Skill3")
-			elif not animation_player.is_playing():
-				animation_player.play("Idle")
+
 
 func handle_camera_rotation() ->void:
 	rotate_y(mouse_motion.x * cam_sensitivity)
@@ -158,9 +147,15 @@ func handle_camera_rotation() ->void:
 	)
 	mouse_motion = Vector2.ZERO
 
-func jump() -> void:
+func jump(dir) -> void:
 	if is_on_floor():
 			velocity.y = sqrt(jump_height * 2 * gravity)
+			dir.y = 0
+			var hv = velocity
+			hv.y = 0
+			hv = hv.lerp(dir * 2, 0.5)
+			velocity.x = hv.x
+			velocity.z = hv.z
 
 func shoot(scene: PackedScene) -> void:
 	var proj = scene.instantiate()

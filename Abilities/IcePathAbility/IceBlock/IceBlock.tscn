@@ -1,7 +1,6 @@
-[gd_scene load_steps=6 format=3 uid="uid://6syi5p20o6g2"]
+[gd_scene load_steps=5 format=3 uid="uid://6syi5p20o6g2"]
 
 [ext_resource type="Script" path="res://Abilities/IcePathAbility/IceBlock/IceBlock.gd" id="1_i5qre"]
-[ext_resource type="Curve" uid="uid://dk2lds2fdl233" path="res://Abilities/IcePathAbility/IceBlock/IceSizeCurve.tres" id="2_w82uc"]
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_st2vk"]
 radius = 2.0
@@ -16,7 +15,6 @@ albedo_color = Color(0.87451, 1, 1, 0.109804)
 
 [node name="Iceblock2" type="Node3D"]
 script = ExtResource("1_i5qre")
-sizeCurve = ExtResource("2_w82uc")
 
 [node name="Area3D" type="Area3D" parent="."]
 collision_layer = 2

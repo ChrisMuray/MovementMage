@@ -1,0 +1,10 @@
+[gd_scene load_steps=2 format=3 uid="uid://bw3x8klbdqs4o"]
+
+[ext_resource type="Script" path="res://Abilities/DashAbility/DashAbility.gd" id="1_vpi4a"]
+
+[node name="DashAbility" type="Node"]
+script = ExtResource("1_vpi4a")
+dash_strength = null
+charge_rate = null
+y_vel_scale = null
+endVelMultiplier = null

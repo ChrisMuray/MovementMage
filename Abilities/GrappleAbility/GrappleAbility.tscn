@@ -1,11 +1,30 @@
-[gd_scene load_steps=3 format=3 uid="uid://cijbxlo22aekd"]
+[gd_scene load_steps=4 format=3 uid="uid://cijbxlo22aekd"]
 
 [ext_resource type="Script" path="res://Abilities/GrappleAbility/GrappleAbility.gd" id="1_oybg6"]
 
 [sub_resource type="Curve3D" id="Curve3D_7rdt2"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_my75l"]
+transparency = 1
+shading_mode = 0
+albedo_color = Color(0, 1, 0, 0.15)
 
 [node name="GrappleAbility" type="Node3D"]
 script = ExtResource("1_oybg6")
 
 [node name="GrapplePath" type="Path3D" parent="."]
 curve = SubResource("Curve3D_7rdt2")
+
+[node name="CSGPolygon3D" type="CSGPolygon3D" parent="GrapplePath"]
+polygon = PackedVector2Array(-0.05, -0.05, -0.05, 0.05, 0.05, 0.05, 0.05, -0.05)
+mode = 2
+path_node = NodePath("..")
+path_interval_type = 0
+path_interval = 1.0
+path_simplify_angle = 0.0
+path_rotation = 2
+path_local = true
+path_continuous_u = true
+path_u_distance = 1.0
+path_joined = false
+material = SubResource("StandardMaterial3D_my75l")
