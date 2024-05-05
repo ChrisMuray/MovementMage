@@ -171,9 +171,11 @@ func _input(event: InputEvent) -> void:
 	else:
 		if Input.is_action_pressed("jump"):
 			jump(direction)	
+			animation_tree["parameters/playback"].travel("Airborne")
 		
 		if Input.is_action_pressed("earth_pillar"):
 			earthPillarAbility.spawn_pillar()
+			animation_tree["parameters/playback"].travel("EarthPillar")
 		
 		if not icePathAbility.casting:
 			if Input.is_action_just_pressed("ice_path") or Input.is_action_pressed("ice_path"):
@@ -183,7 +185,7 @@ func _input(event: InputEvent) -> void:
 				animation_tree.set("parameters/conditions/castIce", true)
 				animation_tree.set("parameters/conditions/stopCastIce", false)
 		else:
-			if Input.is_action_just_released("ice_path"):
+			if Input.is_action_just_released("ice_path") or not Input.is_action_pressed("ice_path"):
 				icePathAbility.casting = false
 				# Must be a better way
 				animation_tree.set("parameters/conditions/stopCastIce", true)

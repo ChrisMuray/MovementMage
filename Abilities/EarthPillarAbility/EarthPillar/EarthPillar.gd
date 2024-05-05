@@ -4,7 +4,7 @@ extends Node3D
 @onready var collisionShapeNode: CollisionShape3D = $"Pillar/CollisionShape3D"
 @onready var velocityAreaNodeE: Area3D = $"Pillar/VelocityArea"
 @onready var velocityAreaNode: CollisionShape3D = $"Pillar/VelocityArea/CollisionShape3D"
-@onready var meshNode: MeshInstance3D = $"Pillar/MeshInstance3D"
+@onready var meshNode: Node3D = $"Pillar/RockPillar"
 
 var collidedPlayer: Player = null
 

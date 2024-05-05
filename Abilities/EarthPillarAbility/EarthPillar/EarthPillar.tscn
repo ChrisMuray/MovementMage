@@ -1,6 +1,7 @@
-[gd_scene load_steps=6 format=3 uid="uid://sv01xsoa8yic"]
+[gd_scene load_steps=5 format=3 uid="uid://sv01xsoa8yic"]
 
 [ext_resource type="Script" path="res://Abilities/EarthPillarAbility/EarthPillar/EarthPillar.gd" id="1_hgei2"]
+[ext_resource type="PackedScene" uid="uid://51utdinweeec" path="res://Assets/Models/Abilities/RockPillar.glb" id="2_d6ubd"]
 
 [sub_resource type="CylinderShape3D" id="CylinderShape3D_iwthc"]
 height = 0.3
@@ -9,15 +10,6 @@ radius = 1.5
 [sub_resource type="CylinderShape3D" id="CylinderShape3D_v0oaq"]
 height = 8.0
 radius = 1.5
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_np02i"]
-albedo_color = Color(0.4, 0.266667, 0.133333, 1)
-
-[sub_resource type="CylinderMesh" id="CylinderMesh_m2xcq"]
-material = SubResource("StandardMaterial3D_np02i")
-top_radius = 1.5
-bottom_radius = 1.5
-height = 8.0
 
 [node name="EarthPillar" type="Node3D"]
 script = ExtResource("1_hgei2")
@@ -34,10 +26,8 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.08165e-12, -4, 2.08165e-12)
 shape = SubResource("CylinderShape3D_v0oaq")
 disabled = true
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="Pillar"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.08165e-12, -4, 2.08165e-12)
-mesh = SubResource("CylinderMesh_m2xcq")
-skeleton = NodePath("../..")
+[node name="RockPillar" parent="Pillar" instance=ExtResource("2_d6ubd")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -6, 0)
 
 [connection signal="body_entered" from="Pillar/VelocityArea" to="." method="_on_velocity_area_body_entered"]
 [connection signal="body_exited" from="Pillar/VelocityArea" to="." method="_on_velocity_area_body_exited"]
