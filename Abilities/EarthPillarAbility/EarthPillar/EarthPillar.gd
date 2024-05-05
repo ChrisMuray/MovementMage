@@ -7,9 +7,6 @@ extends Node3D
 
 @onready var meshNode: MeshInstance3D = $"Pillar/MeshInstance3D"
 
-var prev_position := 0.0
-var vert_velocity := 0.0
-
 var collidedPlayer: Player = null
 
 # Called when the node enters the scene tree for the first time.
@@ -27,12 +24,9 @@ func _ready():
 	tween.set_ease(Tween.EASE_IN).tween_property(pillarNode, "position", Vector3(0, 0, 0), 1.0)
 	tween.tween_callback(queue_free)
 
-func _physics_process(delta):
-	vert_velocity = (pillarNode.position.y - prev_position) / delta
-	prev_position = pillarNode.position.y
-
+func _physics_process(_delta):
 	if collidedPlayer:
-		collidedPlayer.velocity.y = max(vert_velocity, collidedPlayer.velocity.y)
+		collidedPlayer.velocity.y = max(16, collidedPlayer.velocity.y)
 
 func swapCollision():
 	collisionShapeNode.disabled = false
