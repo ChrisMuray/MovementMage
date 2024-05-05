@@ -4,16 +4,15 @@ extends Node3D
 @onready var collisionShapeNode: CollisionShape3D = $"Pillar/CollisionShape3D"
 @onready var velocityAreaNodeE: Area3D = $"Pillar/VelocityArea"
 @onready var velocityAreaNode: CollisionShape3D = $"Pillar/VelocityArea/CollisionShape3D"
-
 @onready var meshNode: MeshInstance3D = $"Pillar/MeshInstance3D"
 
 var collidedPlayer: Player = null
 
-# Called when the node enters the scene tree for the first time.
 func _ready():
 	meshNode.rotate_x(randf_range(-0.1, 0.1))
 	meshNode.rotate_z(randf_range(-0.1, 0.1))
 
+	# nasty tween
 	collisionShapeNode.disabled = true
 	var tween = get_tree().create_tween()
 	tween.set_ease(Tween.EASE_OUT)

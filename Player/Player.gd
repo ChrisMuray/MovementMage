@@ -53,6 +53,7 @@ var physics_debug_text = ""
 @onready var repulse: Node = $Repulse
 @onready var icePathAbility: Node = $Abilities/IcePathAbility
 @onready var grappleAbility: Node = $Abilities/GrappleAbility
+@onready var earthPillarAbility: Node = $Abilities/EarthPillarAbility
 @onready var dashAbility: Node = $Abilities/DashAbility
 
 func _ready() -> void:
@@ -170,6 +171,9 @@ func _input(event: InputEvent) -> void:
 	else:
 		if Input.is_action_pressed("jump"):
 			jump(direction)	
+		
+		if Input.is_action_pressed("earth_pillar"):
+			earthPillarAbility.spawn_pillar()
 		
 		if not icePathAbility.casting:
 			if Input.is_action_just_pressed("ice_path") or Input.is_action_pressed("ice_path"):
