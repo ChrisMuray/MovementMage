@@ -1,4 +1,5 @@
-class_name Player extends CharacterBody3D
+extends CharacterBody3D
+class_name Player 
 
 # Camera options, go faster -> more FOV
 @export var cam_sensitivity := 2.0
@@ -14,11 +15,11 @@ class_name Player extends CharacterBody3D
 @export var gravity_multiplier := 1.75
 @export var fall_multiplier := 2.0
 
+var crouch_tween: Tween = null
+
 var direction := Vector3.ZERO
-var crouching := false:
-	set(val):
-		crouching = val
-		scale.y = lerp(scale.y, 0.5, 0.5) if val else lerp(scale.y, 1.0, 0.5)
+var crouching := false
+
 # Ability scenes
 @export var fireball_scene: PackedScene
 
@@ -40,7 +41,7 @@ var first_person := true:
 @onready var raycast: RayCast3D = $CameraPivot/Camera3D/Raycast3D
 @onready var info_label: Label = $InfoLabel
 @onready var center_of_mass: Node3D = $CenterOfMass
-# @onready var grapple_hook: Path3D = $GrappleHook
+@onready var collision_shape: CollisionShape3D = $CollisionShape3D
 @onready var animation_tree: AnimationTree = $AnimationTree
 @onready var collider: CollisionShape3D = $CollisionShape3D
 @onready var arm_viewport: SubViewportContainer = $ArmViewport
@@ -68,6 +69,7 @@ func _process(delta: float) -> void:
 	animation_tree.set("parameters/conditions/isAirborne", not is_on_floor())
 	animation_tree.set("parameters/conditions/notAirborne", is_on_floor())
 
+
 func _physics_process(delta: float) -> void:				
 	## MOVEMENT	
 	# Get the input direction and handle the movement/deceleration.
@@ -75,6 +77,18 @@ func _physics_process(delta: float) -> void:
 	direction = (transform.basis * Vector3(input_dir.x, 0, input_dir.y)).normalized()
 	
 	var hv = Vector3(velocity.x, 0, velocity.z)
+
+	# Camera bs
+
+	var lerp_r = 1-(0.9**(delta*120.0))
+	if crouching:
+		collision_shape.shape.height = 1.5
+		collision_shape.transform.origin.y = 0.75
+		camera_pivot.position.y = lerp(camera_pivot.position.y, 1.5, lerp_r)
+	else:
+		collision_shape.shape.height = 2.0
+		collision_shape.transform.origin.y = 1.0
+		camera_pivot.position.y = lerp(camera_pivot.position.y, 2.0, lerp_r)
 	
 	if is_on_floor(): # Ground movement logic
 		var target_speed = walking_speed if direction else 0.0
@@ -118,11 +132,13 @@ func _physics_process(delta: float) -> void:
 	"\non ground: " + str(is_on_floor()) + \
 	"\nvelocity: " + str(velocity) + \
 	"\ndirection: " + str(direction)
-	
-	var platform_rot = get_platform_angular_velocity()
-	rotate_y(delta * platform_rot.y)
-	
+
+
 	move_and_slide()
+
+	if is_on_floor():
+		var platform_rot = get_platform_angular_velocity()
+		rotate_y(delta * platform_rot.y)
 
 func _input(event: InputEvent) -> void:
 	if event is InputEventMouseMotion:
@@ -135,7 +151,7 @@ func _input(event: InputEvent) -> void:
 		first_person = not first_person
 	
 	# TODO crouching does not work properly	
-	#crouching = Input.is_action_pressed("crouch")	
+	crouching = Input.is_action_pressed("crouch")
 		
 	## ABILITIES
 	if Input.is_action_just_pressed("fireball"):
