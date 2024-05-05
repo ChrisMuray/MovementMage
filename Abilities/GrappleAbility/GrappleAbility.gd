@@ -35,10 +35,6 @@ func _physics_process(delta):
 	else:
 		checkLookedAtNode()
 
-	if Input.is_action_just_pressed("grapple") and not isGrappling:
-		startGrapple()
-	elif Input.is_action_just_released("grapple") and isGrappling:
-		endGrapple()
 
 func checkLookedAtNode():
 	if rayCastNode and rayCastNode.is_colliding():
@@ -58,13 +54,13 @@ func initGrapple():
 	pathNode.curve.add_point(Vector3(0, -100, 0))
 
 func startGrapple():
-	if lookedAtNode != null:
+	if lookedAtNode != null and not isGrappling:
 		grappledNode = lookedAtNode
 		isGrappling = true
 		grappleReachProgress = 0.0
 
 func endGrapple():
-	if lookedAtNode != null:
+	if lookedAtNode != null and isGrappling:
 		pathNode.curve.set_point_position(0, Vector3(0, -100, 0))
 		pathNode.curve.set_point_position(1, Vector3(0, -100, 0))
 		isGrappling = false

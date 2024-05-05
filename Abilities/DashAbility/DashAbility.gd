@@ -50,8 +50,6 @@ func dash():
 		charge -= 1.0
 
 func _physics_process(delta):
-	if Input.is_action_just_pressed("air_dash"):
-		dash()
 	if playerNode.is_on_floor() or playerNode.is_on_wall():
 		cancel_dash()
 	

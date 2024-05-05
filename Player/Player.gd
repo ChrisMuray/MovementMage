@@ -14,6 +14,11 @@ class_name Player extends CharacterBody3D
 @export var gravity_multiplier := 1.75
 @export var fall_multiplier := 2.0
 
+var direction := Vector3.ZERO
+var crouching := false:
+	set(val):
+		crouching = val
+		scale.y = lerp(scale.y, 0.5, 0.5) if val else lerp(scale.y, 1.0, 0.5)
 # Ability scenes
 @export var fireball_scene: PackedScene
 
@@ -46,8 +51,8 @@ var physics_debug_text = ""
 
 @onready var repulse: Node = $Repulse
 @onready var icePathAbility: Node = $Abilities/IcePathAbility
-
-
+@onready var grappleAbility: Node = $Abilities/GrappleAbility
+@onready var dashAbility: Node = $Abilities/DashAbility
 
 func _ready() -> void:
 	# Respawn point
@@ -58,19 +63,16 @@ func _process(delta: float) -> void:
 	render_debug_text = "FPS: " + str(1.0/delta) + "\n"
 	info_label.text = render_debug_text + physics_debug_text
 	
-	## CAMERA
-	if Input.mouse_mode == Input.MOUSE_MODE_CAPTURED:
-		handle_camera_rotation()
+	## Animation
+	animation_tree.set("parameters/locomotion/blend_position", velocity.length() / max_ground_speed)
+	animation_tree.set("parameters/conditions/isAirborne", not is_on_floor())
+	animation_tree.set("parameters/conditions/notAirborne", is_on_floor())
 
-func _physics_process(delta: float) -> void:	
-	if Input.is_action_just_pressed("switch_cam"):
-		first_person = not first_person
-			
-	## MOVEMENT
-	
+func _physics_process(delta: float) -> void:				
+	## MOVEMENT	
 	# Get the input direction and handle the movement/deceleration.
 	var input_dir := Input.get_vector("move_left", "move_right", "move_forward", "move_back")
-	var direction := (transform.basis * Vector3(input_dir.x, 0, input_dir.y)).normalized()
+	direction = (transform.basis * Vector3(input_dir.x, 0, input_dir.y)).normalized()
 	
 	var hv = Vector3(velocity.x, 0, velocity.z)
 	
@@ -108,11 +110,6 @@ func _physics_process(delta: float) -> void:
 			
 		# Cap air speed
 		velocity = velocity.limit_length(max_air_speed)
-	
-	# Handle jump
-	if Input.is_action_pressed("jump"):
-		jump(direction)
-	
 
 		## DEBUG INFO
 	physics_debug_text = "Physics FPS: " + str(1.0/delta) + \
@@ -121,19 +118,61 @@ func _physics_process(delta: float) -> void:
 	"\non ground: " + str(is_on_floor()) + \
 	"\nvelocity: " + str(velocity) + \
 	"\ndirection: " + str(direction)
-
-	move_and_slide()
-
+	
 	var platform_rot = get_platform_angular_velocity()
 	rotate_y(delta * platform_rot.y)
+	
+	move_and_slide()
 
 func _input(event: InputEvent) -> void:
 	if event is InputEventMouseMotion:
 		mouse_motion = -event.relative * 0.001
 		
+	## CAMERA
+	if Input.mouse_mode == Input.MOUSE_MODE_CAPTURED:
+		handle_camera_rotation()	
+	if Input.is_action_just_pressed("switch_cam"):
+		first_person = not first_person
+	
+	# TODO crouching does not work properly	
+	#crouching = Input.is_action_pressed("crouch")	
+		
 	## ABILITIES
 	if Input.is_action_just_pressed("fireball"):
 		shoot(fireball_scene)
+		
+	## Aerial and Ground abilities	
+	## Aerial
+	if not is_on_floor():			
+		if Input.is_action_just_pressed("air_dash"):
+			dashAbility.dash()
+			animation_tree.set("parameters/conditions/airDash", true)
+		else:
+			# Why does Godot not have triggers? Unity superiority
+			animation_tree.set("parameters/conditions/airDash", false)
+	## Grounded
+	else:
+		if Input.is_action_pressed("jump"):
+			jump(direction)	
+		
+		if not icePathAbility.casting:
+			if Input.is_action_just_pressed("ice_path") or Input.is_action_pressed("ice_path"):
+				icePathAbility.casting = true
+				# This is so fucking stupid
+				# TODO transition from airborne to ice path is very wonky
+				animation_tree.set("parameters/conditions/castIce", true)
+				animation_tree.set("parameters/conditions/stopCastIce", false)
+		else:
+			if Input.is_action_just_released("ice_path"):
+				icePathAbility.casting = false
+				# Must be a better way
+				animation_tree.set("parameters/conditions/stopCastIce", true)
+				animation_tree.set("parameters/conditions/castIce", false)
+		
+	if Input.is_action_just_pressed("grapple"):
+		grappleAbility.startGrapple()
+	elif Input.is_action_just_released("grapple"):
+		grappleAbility.endGrapple()
 	
 	if Input.is_action_just_pressed("die"):
 		die()
@@ -147,15 +186,14 @@ func handle_camera_rotation() ->void:
 	)
 	mouse_motion = Vector2.ZERO
 
-func jump(dir) -> void:
-	if is_on_floor():
-			velocity.y = sqrt(jump_height * 2 * gravity)
-			dir.y = 0
-			var hv = velocity
-			hv.y = 0
-			hv = hv.lerp(dir * 2, 0.5)
-			velocity.x = hv.x
-			velocity.z = hv.z
+func jump(dir) -> void:	
+	velocity.y = sqrt(jump_height * 2 * gravity)
+	dir.y = 0
+	var hv = velocity
+	hv.y = 0
+	hv = hv.lerp(dir * 2, 0.5)
+	velocity.x = hv.x
+	velocity.z = hv.z
 
 func shoot(scene: PackedScene) -> void:
 	var proj = scene.instantiate()

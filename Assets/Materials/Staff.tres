@@ -1,0 +1,14 @@
+[gd_resource type="StandardMaterial3D" load_steps=4 format=3 uid="uid://dqetftdcg8wj4"]
+
+[ext_resource type="Texture2D" uid="uid://b7il3rg14youb" path="res://Assets/Models/Mage/MagePlayer_bark_09_baseColor_1k.png" id="1_vcqvm"]
+[ext_resource type="Texture2D" uid="uid://b87cdoio6xr6x" path="res://Assets/Models/Mage/MagePlayer_bark_09_metallic_1k-bark_09_roughness_1k.png" id="2_r2g1m"]
+[ext_resource type="Texture2D" uid="uid://c1lo36ddrfit2" path="res://Assets/Models/Mage/MagePlayer_bark_09_normal_gl_1k.png" id="3_vmqko"]
+
+[resource]
+diffuse_mode = 3
+albedo_texture = ExtResource("1_vcqvm")
+metallic = 1.0
+metallic_texture = ExtResource("2_r2g1m")
+roughness = 0.85
+normal_enabled = true
+normal_texture = ExtResource("3_vmqko")
