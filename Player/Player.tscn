@@ -4512,8 +4512,8 @@ states/Skill3/position = Vector2(910.667, 315)
 states/Start/position = Vector2(157.333, 191.333)
 states/locomotion/node = SubResource("AnimationNodeBlendSpace1D_sj7qu")
 states/locomotion/position = Vector2(374.667, 191.333)
-transitions = ["Start", "locomotion", SubResource("AnimationNodeStateMachineTransition_i2nbo"), "Airborne", "AirDash", SubResource("AnimationNodeStateMachineTransition_l6qp7"), "locomotion", "Airborne", SubResource("AnimationNodeStateMachineTransition_t45q0"), "Airborne", "locomotion", SubResource("AnimationNodeStateMachineTransition_wwniw"), "AirDash", "Airborne", SubResource("AnimationNodeStateMachineTransition_8ixd8"), "AirDash", "locomotion", SubResource("AnimationNodeStateMachineTransition_14jie"), "locomotion", "Ice Path", SubResource("AnimationNodeStateMachineTransition_6ud4y"), "Ice Path", "locomotion", SubResource("AnimationNodeStateMachineTransition_jojgu"), "locomotion", "EarthPillar", SubResource("AnimationNodeStateMachineTransition_fbpak"), "EarthPillar", "locomotion", SubResource("AnimationNodeStateMachineTransition_sjgvn")]
-graph_offset = Vector2(-383, 42)
+transitions = ["Start", "locomotion", SubResource("AnimationNodeStateMachineTransition_i2nbo"), "Airborne", "AirDash", SubResource("AnimationNodeStateMachineTransition_l6qp7"), "locomotion", "Airborne", SubResource("AnimationNodeStateMachineTransition_t45q0"), "Airborne", "locomotion", SubResource("AnimationNodeStateMachineTransition_wwniw"), "AirDash", "Airborne", SubResource("AnimationNodeStateMachineTransition_8ixd8"), "AirDash", "locomotion", SubResource("AnimationNodeStateMachineTransition_14jie"), "locomotion", "Ice Path", SubResource("AnimationNodeStateMachineTransition_6ud4y"), "Ice Path", "locomotion", SubResource("AnimationNodeStateMachineTransition_jojgu")]
+graph_offset = Vector2(-178.28, 36.21)
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_46n6l"]
 
@@ -4523,6 +4523,15 @@ collision_mask = 3
 floor_constant_speed = true
 script = ExtResource("1_dgsno")
 cam_sensitivity = 2.5
+walking_speed = null
+max_ground_speed = null
+max_air_speed = null
+air_control = null
+air_control_directionality = null
+jump_height = null
+double_jump_count = null
+gravity_multiplier = null
+fall_multiplier = null
 fireball_scene = ExtResource("3_lujqw")
 
 [node name="AnimationTree" type="AnimationTree" parent="."]
@@ -4561,7 +4570,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
 
 [node name="Camera3D" type="Camera3D" parent="CameraPivot"]
 cull_mask = 1048569
-current = true
 fov = 95.0
 
 [node name="Arms" parent="CameraPivot/Camera3D" instance=ExtResource("6_kahsn")]
@@ -4601,9 +4609,9 @@ bones/20/scale = Vector3(1, 1, 1)
 bones/22/rotation = Quaternion(0.0346014, -0.0133634, -0.00342347, 0.999306)
 bones/23/rotation = Quaternion(0.0790026, 0.658179, -0.0503077, 0.747013)
 bones/23/scale = Vector3(1, 1, 1)
-bones/24/rotation = Quaternion(-0.00902365, 0.0248305, 0.966309, 0.256027)
+bones/24/rotation = Quaternion(-0.247713, 0.0828093, 0.917814, 0.298996)
 bones/24/scale = Vector3(0.999999, 1, 1)
-bones/25/rotation = Quaternion(0.146958, -0.0450134, 0.0720891, 0.985485)
+bones/25/rotation = Quaternion(0.499794, -0.0379048, 0.24517, 0.829856)
 bones/25/scale = Vector3(1, 1, 1)
 bones/27/rotation = Quaternion(0.0551694, -0.736926, -0.0246305, 0.673268)
 bones/27/scale = Vector3(1, 1, 1)
@@ -4637,8 +4645,9 @@ bones/46/scale = Vector3(1, 1, 1)
 bones/47/rotation = Quaternion(-0.19162, 0.680648, -0.680648, 0.19162)
 bones/48/rotation = Quaternion(-0.0739177, 0.246368, 0.96617, -0.0188486)
 bones/49/rotation = Quaternion(0.19162, 0.680648, -0.680648, -0.19162)
-bones/50/rotation = Quaternion(0.968993, 0, 0, 0.247088)
-bones/50/scale = Vector3(1, 1, 1)
+bones/50/position = Vector3(-1.62287, 0.244646, 0.9848)
+bones/50/rotation = Quaternion(0.977435, 0.0271481, 0.136536, 0.158878)
+bones/51/position = Vector3(-1.64465, 0.352252, 1.31253)
 
 [node name="Gem" parent="CameraPivot/Camera3D/Arms/Armature/Skeleton3D" index="0"]
 layers = 2
@@ -4691,6 +4700,7 @@ render_target_update_mode = 4
 [node name="ArmsCamera" type="Camera3D" parent="ArmViewport/SubViewport"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
 cull_mask = 2
+current = true
 fov = 85.0
 
 [node name="GUI" parent="." instance=ExtResource("8_syr4s")]

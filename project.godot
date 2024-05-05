@@ -17,6 +17,7 @@ config/icon="res://icon.svg"
 
 [autoload]
 
+InputBuffer="*res://input_buffer.gd"
 Global="*res://Global.gd"
 
 [editor]

@@ -32,21 +32,23 @@ func cancel_dash():
 		if playerNode.velocity.length() > speed_cap:
 			playerNode.velocity = playerNode.velocity.limit_length(speed_cap)
 
+func dash_ready():
+	return charge >= 1.0
+
 func dash():
-	if charge >= 1.0:
-		currentDashVelocity = -playerCamNode.global_basis.z * dash_strength
-		currentDashVelocity.y *= y_vel_scale
+	currentDashVelocity = -playerCamNode.global_basis.z * dash_strength
+	currentDashVelocity.y *= y_vel_scale
 
-		if dashTween:
-			dashTween.kill()
-			dashTween = null
-		dashTween = get_tree().create_tween()
-		playerNode.velocity = currentDashVelocity
+	if dashTween:
+		dashTween.kill()
+		dashTween = null
+	dashTween = get_tree().create_tween()
+	playerNode.velocity = currentDashVelocity
 
-		# after 0.15s, tween to 0.35x dash velocity over 0.025s
-		dashTween.tween_property(playerNode, "velocity", currentDashVelocity*endVelMultiplier, 0.025).set_delay(0.15)
+	# after 0.15s, tween to 0.35x dash velocity over 0.025s
+	dashTween.tween_property(playerNode, "velocity", currentDashVelocity*endVelMultiplier, 0.025).set_delay(0.15)
 
-		charge -= 1.0
+	charge -= 1.0
 
 func _physics_process(delta):
 	if playerNode.is_on_floor():

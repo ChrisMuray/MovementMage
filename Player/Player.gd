@@ -134,12 +134,33 @@ func _physics_process(delta: float) -> void:
 	"\nvelocity: " + str(velocity) + \
 	"\ndirection: " + str(direction)
 
-
 	move_and_slide()
 
 	if is_on_floor():
 		var platform_rot = get_platform_angular_velocity()
 		rotate_y(delta * platform_rot.y)
+
+	handleBufferedInputs()
+
+func handleBufferedInputs():
+	# Aerial
+	if not is_on_floor():
+		# note: order matters. Need to check if dash is ready first and short circuit if false,
+		# since is_action_press_buffered only returns true for 1 frame.
+		if dashAbility.dash_ready() and InputBuffer.is_action_press_buffered("air_dash"):
+			dashAbility.dash()
+			animation_tree.set("parameters/conditions/airDash", true)
+		else:
+			# Why does Godot not have triggers? Unity superiority
+			animation_tree.set("parameters/conditions/airDash", false)
+	# Ground
+	else:
+		if InputBuffer.is_action_press_buffered("jump"):
+			jump(direction)
+			animation_tree["parameters/playback"].travel("Airborne")
+		if InputBuffer.is_action_press_buffered("earth_pillar"):
+			earthPillarAbility.spawn_pillar()
+			animation_tree["parameters/playback"].travel("EarthPillar")
 
 func _input(event: InputEvent) -> void:
 	if event is InputEventMouseMotion:
@@ -161,22 +182,9 @@ func _input(event: InputEvent) -> void:
 	## Aerial and Ground abilities	
 	## Aerial
 	if not is_on_floor():			
-		if Input.is_action_just_pressed("air_dash"):
-			dashAbility.dash()
-			animation_tree.set("parameters/conditions/airDash", true)
-		else:
-			# Why does Godot not have triggers? Unity superiority
-			animation_tree.set("parameters/conditions/airDash", false)
+		pass
 	## Grounded
 	else:
-		if Input.is_action_pressed("jump"):
-			jump(direction)	
-			animation_tree["parameters/playback"].travel("Airborne")
-		
-		if Input.is_action_pressed("earth_pillar"):
-			earthPillarAbility.spawn_pillar()
-			animation_tree["parameters/playback"].travel("EarthPillar")
-		
 		if not icePathAbility.casting:
 			if Input.is_action_just_pressed("ice_path") or Input.is_action_pressed("ice_path"):
 				icePathAbility.casting = true
