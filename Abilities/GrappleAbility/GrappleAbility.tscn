@@ -9,7 +9,7 @@ transparency = 1
 shading_mode = 0
 albedo_color = Color(0, 1, 0, 0.15)
 
-[node name="GrappleAbility" type="Node3D"]
+[node name="GrappleAbility" type="Node"]
 script = ExtResource("1_oybg6")
 
 [node name="GrapplePath" type="Path3D" parent="."]

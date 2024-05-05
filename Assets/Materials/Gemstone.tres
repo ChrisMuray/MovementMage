@@ -1,4 +1,4 @@
-[gd_resource type="ShaderMaterial" load_steps=2 format=3 uid="uid://djoiuje32tuhi"]
+[gd_resource type="ShaderMaterial" load_steps=2 format=3 uid="uid://dwtg3uw473dop"]
 
 [ext_resource type="Shader" path="res://Assets/Materials/Shaders/GemFresnel.gdshader" id="1_mgskw"]
 

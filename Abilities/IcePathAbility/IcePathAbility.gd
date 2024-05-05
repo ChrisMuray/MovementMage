@@ -1,9 +1,8 @@
-extends Node
+extends Ability
 class_name IcePathAbility
 
 const icedShader := preload("./iced.tres")
 const iceBlockTscn := preload("./IceBlock/IceBlock.tscn")
-@onready var playerNode := $"../../"
 
 var casting := false
 
@@ -21,6 +20,7 @@ func placeIce(pos):
 	nextIce = (nextIce + 1) % numIces
 
 func _ready():
+	super._ready()
 	for i in range(numIces):
 		var ice = iceBlockTscn.instantiate()
 		add_child(ice)

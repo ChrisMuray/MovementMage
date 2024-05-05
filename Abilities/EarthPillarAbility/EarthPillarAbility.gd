@@ -1,7 +1,6 @@
-extends Node
+extends Ability
 
 const earthPillarTscn: PackedScene = preload("./EarthPillar/EarthPillar.tscn")
-@onready var playerNode: Player = $"../../"
 # TODO add gem color change
 #@onready var gemNode: GDScript = playerNode
 @export var animDelay := 0.75

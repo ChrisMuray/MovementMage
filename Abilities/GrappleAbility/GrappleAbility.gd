@@ -1,12 +1,8 @@
-extends Node3D
-
+extends Ability
 
 # const grappleMaterial := preload("./GrapplePlaceholderMaterial.tres")
 const grappleProgressCurve := preload("./GrappleProgressCurve.tres")
 @onready var pathNode: Path3D = $GrapplePath
-@onready var playerNode: Player = $"../../"
-@onready var cameraNode: Camera3D = $"../../CameraPivot/Camera3D"
-@onready var rayCastNode: RayCast3D = $"../../CameraPivot/Camera3D/Raycast3D"
 
 var lookedAtNode: GrappleableObject = null
 var grappledNode: GrappleableObject = null
@@ -17,14 +13,15 @@ var grappleReachProgress: float = 0.0
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
+	super._ready()
 	initGrapple()
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(_delta):
 	if isGrappling:
 		var wandPos = cameraNode.to_global(Vector3(0.794, 0.189, -0.584))
-		var startPoint = to_local(wandPos)
-		var endPoint = to_local(grappledNode.global_transform.origin)
+		var startPoint = wandPos
+		var endPoint = grappledNode.global_transform.origin
 		var dist = grappleProgressCurve.sample(grappleReachProgress)
 		pathNode.curve.set_point_position(0, startPoint)
 		pathNode.curve.set_point_position(1, startPoint.lerp(endPoint,dist))
@@ -55,12 +52,14 @@ func initGrapple():
 
 func startGrapple():
 	if lookedAtNode != null and not isGrappling:
+		setGemColor(Color(1,0,0))
 		grappledNode = lookedAtNode
 		isGrappling = true
 		grappleReachProgress = 0.0
 
 func endGrapple():
 	if lookedAtNode != null and isGrappling:
+		resetGemColor()
 		pathNode.curve.set_point_position(0, Vector3(0, -100, 0))
 		pathNode.curve.set_point_position(1, Vector3(0, -100, 0))
 		isGrappling = false

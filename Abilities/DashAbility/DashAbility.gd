@@ -1,4 +1,4 @@
-extends Node
+extends Ability
 
 # A dash tweens the velocity from the dash speed to 0.35x the dash speed,
 # so you launch forward but also slow down. Feels more controllable at 
@@ -8,9 +8,6 @@ extends Node
 @export var charge_rate := 0.5       # how fast the dash recharges
 @export var y_vel_scale := 0.7       # nerfs ability for players to dash up.
 @export var endVelMultiplier := 0.35
-
-@onready var playerNode: Player = $"../../"
-@onready var playerCamNode: Camera3D = $"../../CameraPivot/Camera3D"
 
 var has_touched_surface := true
 var charge := 3.0
@@ -36,7 +33,7 @@ func dash_ready():
 	return charge >= 1.0
 
 func dash():
-	currentDashVelocity = -playerCamNode.global_basis.z * dash_strength
+	currentDashVelocity = -cameraNode.global_basis.z * dash_strength
 	currentDashVelocity.y *= y_vel_scale
 
 	if dashTween:
