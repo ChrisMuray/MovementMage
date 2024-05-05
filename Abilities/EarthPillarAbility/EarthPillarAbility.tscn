@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://c50ylq275o8nl"]
+
+[ext_resource type="Script" path="res://Abilities/EarthPillarAbility/EarthPillarAbility.gd" id="1_817by"]
+
+[node name="EarthPillarAbility" type="Node"]
+script = ExtResource("1_817by")

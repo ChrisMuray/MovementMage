@@ -4,7 +4,3 @@
 
 [node name="DashAbility" type="Node"]
 script = ExtResource("1_vpi4a")
-dash_strength = null
-charge_rate = null
-y_vel_scale = null
-endVelMultiplier = null

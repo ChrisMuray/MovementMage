@@ -9,8 +9,8 @@ extends Node
 @export var y_vel_scale := 0.7       # nerfs ability for players to dash up.
 @export var endVelMultiplier := 0.35
 
-@onready var playerNode: Player = get_parent().get_parent()
-@onready var playerCamNode: Camera3D = get_node("../../CameraPivot/Camera3D")
+@onready var playerNode: Player = $"../../"
+@onready var playerCamNode: Camera3D = $"../../CameraPivot/Camera3D"
 
 var has_touched_surface := true
 var charge := 3.0
@@ -41,7 +41,6 @@ func dash():
 			dashTween.kill()
 			dashTween = null
 		dashTween = get_tree().create_tween()
-		dashTween.set_parallel(true)
 		playerNode.velocity = currentDashVelocity
 
 		# after 0.15s, tween to 0.35x dash velocity over 0.025s
@@ -50,8 +49,12 @@ func dash():
 		charge -= 1.0
 
 func _physics_process(delta):
-	if playerNode.is_on_floor() or playerNode.is_on_wall():
+	if playerNode.is_on_floor():
 		cancel_dash()
+	elif playerNode.is_on_wall():
+		# only cancel if we are moving away from the wall.
+		if playerNode.get_wall_normal().dot(playerNode.velocity) < 0:
+			cancel_dash()
 	
 	charge += charge_rate * delta
 	charge = min(charge, 3.0)
