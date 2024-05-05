@@ -1,0 +1,11 @@
+[gd_resource type="ShaderMaterial" load_steps=2 format=3 uid="uid://djoiuje32tuhi"]
+
+[ext_resource type="Shader" path="res://Assets/Materials/Shaders/GemFresnel.gdshader" id="1_mgskw"]
+
+[resource]
+render_priority = 0
+shader = ExtResource("1_mgskw")
+shader_parameter/base_color = Color(0.266667, 0.709804, 0.32549, 1)
+shader_parameter/fresnel_color = Color(0.0313726, 0.917647, 0, 1)
+shader_parameter/fresnel_amount = 2.0
+shader_parameter/fresnel_intensity = 2.0

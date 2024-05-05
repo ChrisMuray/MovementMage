@@ -5,6 +5,8 @@ const icedShader := preload("./iced.tres")
 const iceBlockTscn := preload("./IceBlock/IceBlock.tscn")
 @onready var playerNode := $"../../"
 
+var casting := false
+
 var numIces := 50
 var ices := []
 var nextIce := 0
@@ -34,7 +36,7 @@ func _process(_delta):
 	icedShader.set_shader_parameter("nodes", positions)
 
 func _physics_process(_delta):
-	if Input.is_action_pressed("ice_path"):
+	if casting:
 		if playerNode.raycast.is_colliding() and \
 		not playerNode.raycast.get_collider() is IceBlock:
 			placeIce(playerNode.raycast.get_collision_point())

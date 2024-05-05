@@ -43,7 +43,7 @@ tonemap_exposure = 1.5
 tonemap_white = 10.77
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_dhfbf"]
-size = Vector3(20, 1, 20)
+size = Vector3(100, 1, 100)
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_rf1vn"]
 albedo_color = Color(0.0588235, 0.270588, 0.0313726, 1)
@@ -51,7 +51,7 @@ albedo_color = Color(0.0588235, 0.270588, 0.0313726, 1)
 [sub_resource type="BoxMesh" id="BoxMesh_p6t8c"]
 lightmap_size_hint = Vector2i(14, 21)
 material = SubResource("StandardMaterial3D_rf1vn")
-size = Vector3(20, 1, 20)
+size = Vector3(100, 1, 100)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_t5wnk"]
 size = Vector3(10, 1, 3)
@@ -169,16 +169,7 @@ material = ExtResource("2_3p5fy")
 
 [node name="Player" parent="." instance=ExtResource("3_oomu2")]
 transform = Transform3D(-0.712394, 0, -0.70178, 0, 1, 0, 0.70178, 0, -0.712394, -1.89689, 0.253113, -0.529007)
-cam_sensitivity = null
-walking_speed = null
-max_ground_speed = null
-max_air_speed = null
-air_control = null
-air_control_directionality = null
-jump_height = null
-double_jump_count = null
-gravity_multiplier = null
-fall_multiplier = null
+cam_sensitivity = 2.0
 
 [node name="Camera3D" type="Camera3D" parent="."]
 transform = Transform3D(0.258819, 0, -0.965926, 0, 1, 0, 0.965926, 0, 0.258819, 18, 5, 0)
