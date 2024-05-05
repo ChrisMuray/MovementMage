@@ -4455,6 +4455,15 @@ collision_mask = 3
 floor_constant_speed = true
 script = ExtResource("1_dgsno")
 cam_sensitivity = 2.5
+walking_speed = null
+max_ground_speed = null
+max_air_speed = null
+air_control = null
+air_control_directionality = null
+jump_height = null
+double_jump_count = null
+gravity_multiplier = null
+fall_multiplier = null
 fireball_scene = ExtResource("3_lujqw")
 
 [node name="AnimationTree" type="AnimationTree" parent="."]
