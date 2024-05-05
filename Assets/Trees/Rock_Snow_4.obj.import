@@ -1,0 +1,22 @@
+[remap]
+
+importer="wavefront_obj"
+importer_version=1
+type="Mesh"
+uid="uid://dmgobejf3bk1f"
+path="res://.godot/imported/Rock_Snow_4.obj-c4029e6792fb9aa5488c1746a3eddd72.mesh"
+
+[deps]
+
+files=["res://.godot/imported/Rock_Snow_4.obj-c4029e6792fb9aa5488c1746a3eddd72.mesh"]
+
+source_file="res://Assets/Trees/Rock_Snow_4.obj"
+dest_files=["res://.godot/imported/Rock_Snow_4.obj-c4029e6792fb9aa5488c1746a3eddd72.mesh", "res://.godot/imported/Rock_Snow_4.obj-c4029e6792fb9aa5488c1746a3eddd72.mesh"]
+
+[params]
+
+generate_tangents=true
+scale_mesh=Vector3(1, 1, 1)
+offset_mesh=Vector3(0, 0, 0)
+optimize_mesh=true
+force_disable_mesh_compression=false

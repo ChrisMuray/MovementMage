@@ -1,0 +1,22 @@
+[remap]
+
+importer="wavefront_obj"
+importer_version=1
+type="Mesh"
+uid="uid://duvyvlrys11c4"
+path="res://.godot/imported/PalmTree_3.obj-f31c1faa69daa4a6571a8d5092f54a7c.mesh"
+
+[deps]
+
+files=["res://.godot/imported/PalmTree_3.obj-f31c1faa69daa4a6571a8d5092f54a7c.mesh"]
+
+source_file="res://Assets/Trees/PalmTree_3.obj"
+dest_files=["res://.godot/imported/PalmTree_3.obj-f31c1faa69daa4a6571a8d5092f54a7c.mesh", "res://.godot/imported/PalmTree_3.obj-f31c1faa69daa4a6571a8d5092f54a7c.mesh"]
+
+[params]
+
+generate_tangents=true
+scale_mesh=Vector3(1, 1, 1)
+offset_mesh=Vector3(0, 0, 0)
+optimize_mesh=true
+force_disable_mesh_compression=false

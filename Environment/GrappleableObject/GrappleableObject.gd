@@ -1,10 +1,9 @@
 extends Node3D
 class_name GrappleableObject
 
-const hoveredMaterial: Material = preload("res://Environment/GrappleableObject/GrappleableObjectHovered.tres")
-
-@onready var meshInstanceNode: MeshInstance3D = $MeshInstance3D
-@onready var collisionShapeNode: CollisionShape3D = $CollisionShape3D
+@onready var meshInstanceNode: MeshInstance3D = $"MeshInstance3D"
+@onready var collisionShapeNode: CollisionShape3D = $"CollisionShape3D"
+const hoveredMaterial: Material = preload("./GrappleableObjectHovered.tres")
 
 var isLookedAt: bool = false
 

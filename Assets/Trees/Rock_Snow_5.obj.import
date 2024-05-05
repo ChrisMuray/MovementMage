@@ -1,0 +1,22 @@
+[remap]
+
+importer="wavefront_obj"
+importer_version=1
+type="Mesh"
+uid="uid://cckp08bxcfcsj"
+path="res://.godot/imported/Rock_Snow_5.obj-9f7f43ba7e8052c322d5b2698547a6a0.mesh"
+
+[deps]
+
+files=["res://.godot/imported/Rock_Snow_5.obj-9f7f43ba7e8052c322d5b2698547a6a0.mesh"]
+
+source_file="res://Assets/Trees/Rock_Snow_5.obj"
+dest_files=["res://.godot/imported/Rock_Snow_5.obj-9f7f43ba7e8052c322d5b2698547a6a0.mesh", "res://.godot/imported/Rock_Snow_5.obj-9f7f43ba7e8052c322d5b2698547a6a0.mesh"]
+
+[params]
+
+generate_tangents=true
+scale_mesh=Vector3(1, 1, 1)
+offset_mesh=Vector3(0, 0, 0)
+optimize_mesh=true
+force_disable_mesh_compression=false

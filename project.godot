@@ -123,3 +123,6 @@ common/physics_ticks_per_second=120
 [rendering]
 
 lights_and_shadows/directional_shadow/soft_shadow_filter_quality=3
+global_illumination/gi/use_half_resolution=true
+environment/ssao/quality=3
+global_illumination/sdfgi/probe_ray_count=5

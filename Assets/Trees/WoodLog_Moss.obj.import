@@ -1,0 +1,22 @@
+[remap]
+
+importer="wavefront_obj"
+importer_version=1
+type="Mesh"
+uid="uid://b881j3eiwv23a"
+path="res://.godot/imported/WoodLog_Moss.obj-f63fb5dd0bc6f10905a9179550a3133e.mesh"
+
+[deps]
+
+files=["res://.godot/imported/WoodLog_Moss.obj-f63fb5dd0bc6f10905a9179550a3133e.mesh"]
+
+source_file="res://Assets/Trees/WoodLog_Moss.obj"
+dest_files=["res://.godot/imported/WoodLog_Moss.obj-f63fb5dd0bc6f10905a9179550a3133e.mesh", "res://.godot/imported/WoodLog_Moss.obj-f63fb5dd0bc6f10905a9179550a3133e.mesh"]
+
+[params]
+
+generate_tangents=true
+scale_mesh=Vector3(1, 1, 1)
+offset_mesh=Vector3(0, 0, 0)
+optimize_mesh=true
+force_disable_mesh_compression=false

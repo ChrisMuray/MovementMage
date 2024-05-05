@@ -1,13 +1,12 @@
-@icon("res://icon.svg") # sets the icon
-
 extends Node3D
 
-const grappleProgressCurve = preload("res://Abilities/GrappleAbility/GrappleProgressCurve.tres")
 
+# const grappleMaterial := preload("./GrapplePlaceholderMaterial.tres")
+const grappleProgressCurve := preload("./GrappleProgressCurve.tres")
 @onready var pathNode: Path3D = $GrapplePath
-@onready var player: Player = get_parent().get_parent()
-@onready var cameraNode: Camera3D = get_node("../../CameraPivot/Camera3D")
-@onready var rayCastNode: RayCast3D = get_node("../../CameraPivot/Camera3D/Raycast3D")
+@onready var playerNode: Player = $"../../"
+@onready var cameraNode: Camera3D = $"../../CameraPivot/Camera3D"
+@onready var rayCastNode: RayCast3D = $"../../CameraPivot/Camera3D/Raycast3D"
 
 var lookedAtNode: GrappleableObject = null
 var grappledNode: GrappleableObject = null
@@ -55,30 +54,8 @@ func checkLookedAtNode():
 
 func initGrapple():
 	pathNode.curve = Curve3D.new()
-	pathNode.curve.add_point(Vector3.ZERO)
-	pathNode.curve.add_point(Vector3.ZERO)
-
-	var grapple_shape = CSGPolygon3D.new()
-	grapple_shape.polygon = PackedVector2Array([
-		Vector2(-0.05, -0.05),
-		Vector2(-0.05, 0.05),
-		Vector2(0.05, 0.05),
-		Vector2(0.05, -0.05)
-	])
-
-	print("inited")
-
-	# halve its opacity
-	grapple_shape.material_override = StandardMaterial3D.new()
-	grapple_shape.material_override.albedo_color = Color(0, 1, 0, 0.15)
-	grapple_shape.material_override.flags_unshaded = true
-	grapple_shape.material_override.flags_transparent = true
-	grapple_shape.material_override.flags_do_not_receive_shadows = true
-
-	grapple_shape.mode = CSGPolygon3D.MODE_PATH
-	grapple_shape.path_local = true
-	grapple_shape.set_path_node(pathNode.get_path())
-	pathNode.add_child(grapple_shape)
+	pathNode.curve.add_point(Vector3(0, -100, 0))
+	pathNode.curve.add_point(Vector3(0, -100, 0))
 
 func startGrapple():
 	if lookedAtNode != null:
@@ -88,8 +65,8 @@ func startGrapple():
 
 func endGrapple():
 	if lookedAtNode != null:
-		pathNode.curve.set_point_position(0, Vector3.ZERO)
-		pathNode.curve.set_point_position(1, Vector3.ZERO)
+		pathNode.curve.set_point_position(0, Vector3(0, -100, 0))
+		pathNode.curve.set_point_position(1, Vector3(0, -100, 0))
 		isGrappling = false
 		grappleReachProgress = 0.0
 
@@ -97,12 +74,13 @@ func updateGrapple(delta):
 	if isGrappling:
 		if grappleReachProgress >= 1.0:
 			grappleReachProgress = 1.0
-			# apply playerphysics
-			var offset = (grappledNode.global_transform.origin - player.global_transform.origin)
+			
+			# apply player physics
+			var offset = (grappledNode.global_transform.origin - playerNode.global_transform.origin)
 			var direction = offset.normalized()
-			var strength = clampf(offset.length() - 3, 0, 100)
+			var strength = clampf(offset.length() - 3, 0, 20)
 
-			player.velocity += direction * strength * 20 * delta
-			player.velocity += Vector3(0, -5, 0) * delta # reduce gravity
+			playerNode.velocity += direction * strength * 20 * delta
+			playerNode.velocity += Vector3(0, -5, 0) * delta # reduce gravity
 		else:
 			grappleReachProgress += delta * grappleReachSpeed;

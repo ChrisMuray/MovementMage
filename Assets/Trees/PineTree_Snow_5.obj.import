@@ -1,0 +1,22 @@
+[remap]
+
+importer="wavefront_obj"
+importer_version=1
+type="Mesh"
+uid="uid://keod44v7gdii"
+path="res://.godot/imported/PineTree_Snow_5.obj-b755af3db8e8689cbd99b34fad65f732.mesh"
+
+[deps]
+
+files=["res://.godot/imported/PineTree_Snow_5.obj-b755af3db8e8689cbd99b34fad65f732.mesh"]
+
+source_file="res://Assets/Trees/PineTree_Snow_5.obj"
+dest_files=["res://.godot/imported/PineTree_Snow_5.obj-b755af3db8e8689cbd99b34fad65f732.mesh", "res://.godot/imported/PineTree_Snow_5.obj-b755af3db8e8689cbd99b34fad65f732.mesh"]
+
+[params]
+
+generate_tangents=true
+scale_mesh=Vector3(1, 1, 1)
+offset_mesh=Vector3(0, 0, 0)
+optimize_mesh=true
+force_disable_mesh_compression=false

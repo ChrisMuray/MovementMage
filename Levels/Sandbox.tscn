@@ -1,42 +1,73 @@
-[gd_scene load_steps=20 format=3 uid="uid://hfd6aam6qf82"]
+[gd_scene load_steps=38 format=3 uid="uid://hfd6aam6qf82"]
 
-[ext_resource type="Texture2D" uid="uid://mebohubes5gy" path="res://Assets/kenney_prototype-textures/PNG/Dark/texture_01.png" id="1_qrte1"]
-[ext_resource type="Texture2D" uid="uid://cpcfu2wrutxju" path="res://Assets/AllSkyFree_Skyboxes/Epic_BlueSunset_EquiRect_flat.png" id="1_y53yd"]
+[ext_resource type="Texture2D" uid="uid://dybd5gpmgiunm" path="res://Assets/Backgrounds/autumn_field_puresky_4k.exr" id="1_vma5p"]
 [ext_resource type="Material" uid="uid://4iu8bel5fm45" path="res://Assets/Materials/SandboxBlock.tres" id="2_2lqfv"]
 [ext_resource type="Material" uid="uid://dxyg365ffw3cb" path="res://Assets/Materials/StoneMaterial.tres" id="2_3p5fy"]
-[ext_resource type="Material" uid="uid://c4bf4cbnrj8be" path="res://Abilities/IcePathAbility/iced.tres" id="3_2xjb8"]
+[ext_resource type="Script" path="res://Levels/RotatingPlatform.gd" id="2_f0fn6"]
 [ext_resource type="PackedScene" uid="uid://xj4im0umqm43" path="res://Player/Player.tscn" id="3_oomu2"]
 [ext_resource type="PackedScene" uid="uid://desdlvedi7xdk" path="res://Sign/Sign.tscn" id="4_nj5mg"]
-[ext_resource type="Material" path="res://materials/rock/rock.tres" id="6_0exgp"]
 [ext_resource type="PackedScene" uid="uid://11evrbotevy7" path="res://Checkpoint/Checkpoint.tscn" id="6_avy1i"]
 [ext_resource type="PackedScene" uid="uid://b1q72wxwam1pw" path="res://Environment/GrappleableObject/GrappleableObject.tscn" id="9_g71o2"]
-[ext_resource type="Script" path="res://Levels/temporary.gd" id="11_nkefq"]
+[ext_resource type="Script" path="res://Levels/SpinningGrapplePoints.gd" id="11_nkefq"]
+[ext_resource type="ArrayMesh" uid="uid://ulxvcodhpdd3" path="res://Assets/Trees/BirchTree_4.obj" id="12_i8em3"]
+[ext_resource type="ArrayMesh" uid="uid://cfqilyyh48hvk" path="res://Assets/Trees/BirchTree_3.obj" id="13_f53vc"]
+[ext_resource type="ArrayMesh" uid="uid://dfvbhdnk8oy2l" path="res://Assets/Trees/Bush_1.obj" id="13_mysae"]
+[ext_resource type="ArrayMesh" uid="uid://b7tlxfliw2ucn" path="res://Assets/Trees/BirchTree_5.obj" id="14_iilxd"]
+[ext_resource type="ArrayMesh" uid="uid://cm6nfu6sgpb1b" path="res://Assets/Trees/Bush_2.obj" id="14_lqcra"]
+[ext_resource type="ArrayMesh" uid="uid://bwvrcdbm4enln" path="res://Assets/Trees/CommonTree_1.obj" id="15_wv3ro"]
+[ext_resource type="ArrayMesh" uid="uid://c0knpywfb8gii" path="res://Assets/Trees/Corn_1.obj" id="16_yxc10"]
+[ext_resource type="ArrayMesh" uid="uid://b4jw47oucqlmh" path="res://Assets/Trees/PalmTree_1.obj" id="17_yu0ji"]
+[ext_resource type="ArrayMesh" uid="uid://n6ey6go1hwm5" path="res://Assets/Trees/PineTree_1.obj" id="18_lcadp"]
+[ext_resource type="ArrayMesh" uid="uid://2frs2vpr7um2" path="res://Assets/Trees/PineTree_5.obj" id="19_nj27d"]
+[ext_resource type="ArrayMesh" uid="uid://cnr2m0dayxi5q" path="res://Assets/Trees/Plant_2.obj" id="20_oebxh"]
+[ext_resource type="ArrayMesh" uid="uid://dxo780kn6gl2k" path="res://Assets/Trees/Rock_3.obj" id="21_dbtkw"]
+[ext_resource type="ArrayMesh" uid="uid://bqyysaqsk7rb" path="res://Assets/Trees/TreeStump.obj" id="22_ionm7"]
+[ext_resource type="ArrayMesh" uid="uid://bf4j44uudmctn" path="res://Assets/Trees/Willow_3.obj" id="23_macqb"]
+[ext_resource type="ArrayMesh" uid="uid://b881j3eiwv23a" path="res://Assets/Trees/WoodLog_Moss.obj" id="24_cuq2e"]
 
-[sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_hltt3"]
-panorama = ExtResource("1_y53yd")
+[sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_ag1u8"]
+panorama = ExtResource("1_vma5p")
 
-[sub_resource type="Sky" id="Sky_d25uv"]
-sky_material = SubResource("PanoramaSkyMaterial_hltt3")
+[sub_resource type="Sky" id="Sky_cbunr"]
+sky_material = SubResource("PanoramaSkyMaterial_ag1u8")
 
-[sub_resource type="Environment" id="Environment_viek2"]
+[sub_resource type="Environment" id="Environment_p61yw"]
 background_mode = 2
-sky = SubResource("Sky_d25uv")
+sky = SubResource("Sky_cbunr")
+ambient_light_source = 3
+ambient_light_color = Color(0.501961, 0.501961, 0.501961, 1)
+ambient_light_sky_contribution = 0.25
+ambient_light_energy = 2.0
 tonemap_mode = 2
-volumetric_fog_density = 0.02
-volumetric_fog_albedo = Color(0.886275, 0.521569, 0, 1)
+tonemap_exposure = 1.5
+tonemap_white = 10.77
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_dhfbf"]
-size = Vector3(200, 1, 200)
+size = Vector3(20, 1, 20)
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ucw30"]
-next_pass = ExtResource("3_2xjb8")
-albedo_texture = ExtResource("1_qrte1")
-uv1_triplanar = true
-uv1_world_triplanar = true
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_rf1vn"]
+albedo_color = Color(0.0588235, 0.270588, 0.0313726, 1)
 
 [sub_resource type="BoxMesh" id="BoxMesh_p6t8c"]
 lightmap_size_hint = Vector2i(14, 21)
-size = Vector3(200, 1, 200)
+material = SubResource("StandardMaterial3D_rf1vn")
+size = Vector3(20, 1, 20)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_t5wnk"]
+size = Vector3(10, 1, 3)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_x7032"]
+albedo_color = Color(0.67451, 0.270588, 0.0313726, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_ntccm"]
+lightmap_size_hint = Vector2i(14, 21)
+material = SubResource("StandardMaterial3D_x7032")
+size = Vector3(10, 1, 3)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_d7867"]
+albedo_color = Color(0.619608, 0.619608, 0.619608, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_d878a"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_ovvj2"]
 
@@ -45,10 +76,12 @@ size = Vector3(200, 1, 200)
 [node name="Sandbox" type="Node3D"]
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
-environment = SubResource("Environment_viek2")
+environment = SubResource("Environment_p61yw")
 
-[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 0.984808, 0.173648, 0, -0.173648, 0.984808, 0, 0, 0)
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="WorldEnvironment"]
+transform = Transform3D(0.797584, 0.273851, -0.537462, 3.10771e-16, 0.891007, 0.453991, 0.603208, -0.362096, 0.710653, 0.868013, 4.72827, 0)
+light_color = Color(0.677567, 0.677567, 0.677567, 1)
+light_energy = 3.0
 shadow_enabled = true
 
 [node name="Floor" type="StaticBody3D" parent="."]
@@ -58,8 +91,18 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
 shape = SubResource("BoxShape3D_dhfbf")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Floor"]
-material_override = SubResource("StandardMaterial3D_ucw30")
 mesh = SubResource("BoxMesh_p6t8c")
+
+[node name="AnimatableBody3D" type="AnimatableBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12.1445, -9.53674e-07, 15.7405)
+script = ExtResource("2_f0fn6")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="AnimatableBody3D"]
+shape = SubResource("BoxShape3D_t5wnk")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="AnimatableBody3D"]
+mesh = SubResource("BoxMesh_ntccm")
+skeleton = NodePath("")
 
 [node name="Blocks" type="Node3D" parent="."]
 
@@ -79,10 +122,9 @@ material = ExtResource("2_3p5fy")
 
 [node name="Block8" type="CSGBox3D" parent="Blocks"]
 transform = Transform3D(0.662004, -0.00242601, 0.749497, 0.00160603, 0.999997, 0.00181829, -0.749499, 0, 0.662006, 0.91189, 6.14895, -11.6104)
-material_override = ExtResource("2_2lqfv")
 use_collision = true
 size = Vector3(5.60986, 12.2979, 6.47704)
-material = ExtResource("2_3p5fy")
+material = SubResource("StandardMaterial3D_d7867")
 
 [node name="Block5" type="CSGBox3D" parent="Blocks"]
 transform = Transform3D(0.840576, 0, -0.541694, 0, 1, 0, 0.541694, 0, 0.840576, 50.4377, 4.9732, 58.9018)
@@ -95,7 +137,7 @@ material = ExtResource("2_3p5fy")
 transform = Transform3D(0.150467, -0.255872, 0.954929, 0, 0.965926, 0.258819, -0.988615, -0.0389437, 0.14534, -20.2381, 0.825239, -14.8957)
 use_collision = true
 size = Vector3(8.56885, 5, 25)
-material = ExtResource("6_0exgp")
+material = SubResource("StandardMaterial3D_d878a")
 
 [node name="Block3" type="CSGBox3D" parent="Blocks"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 15.8268, 25.4269, -9)
@@ -126,7 +168,7 @@ size = Vector3(6, 5, 5)
 material = ExtResource("2_3p5fy")
 
 [node name="Player" parent="." instance=ExtResource("3_oomu2")]
-transform = Transform3D(-0.712394, 0, -0.70178, 0, 1, 0, 0.70178, 0, -0.712394, -38.5321, 0.253113, -23.5708)
+transform = Transform3D(-0.712394, 0, -0.70178, 0, 1, 0, 0.70178, 0, -0.712394, -1.89689, 0.253113, -0.529007)
 cam_sensitivity = 2.0
 
 [node name="Camera3D" type="Camera3D" parent="."]
@@ -233,3 +275,63 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 18.7793, 19.6311, -28.2458)
 
 [node name="GrappleableObject5" parent="Grappleables" instance=ExtResource("9_g71o2")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.16065, 11.165, -51.9422)
+
+[node name="BirchTree4" type="MeshInstance3D" parent="."]
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, -8.441, -0.00549823, -2.02843)
+mesh = ExtResource("12_i8em3")
+
+[node name="BirchTree3" type="MeshInstance3D" parent="."]
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 4.67902, 0, -1.22643)
+mesh = ExtResource("13_f53vc")
+
+[node name="BirchTree5" type="MeshInstance3D" parent="."]
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, -3.7913, 7.15256e-07, 1.7702)
+mesh = ExtResource("14_iilxd")
+
+[node name="Bush1" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.33206, 0, 4.53011)
+mesh = ExtResource("13_mysae")
+
+[node name="Bush2" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.08559, 0, 4.67945)
+mesh = ExtResource("14_lqcra")
+
+[node name="CommonTree1" type="MeshInstance3D" parent="."]
+transform = Transform3D(2.5, 0, 0, 0, 2.5, 0, 0, 0, 2.5, -2.4043, 0, 7.74936)
+mesh = ExtResource("15_wv3ro")
+
+[node name="Corn1" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.68041, 0, 6.91672)
+mesh = ExtResource("16_yxc10")
+
+[node name="PalmTree1" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.06157, 0, -1.94659)
+mesh = ExtResource("17_yu0ji")
+
+[node name="PineTree1" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.15005, 0, 8.76372)
+mesh = ExtResource("18_lcadp")
+
+[node name="PineTree5" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.8815, 0, 8.04022)
+mesh = ExtResource("19_nj27d")
+
+[node name="Plant2" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.47865, 4.76837e-07, 4.35122)
+mesh = ExtResource("20_oebxh")
+
+[node name="Rock3" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.51864, -4.76837e-07, 5.91388)
+mesh = ExtResource("21_dbtkw")
+
+[node name="TreeStump" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.82069, 0, 7.4789)
+mesh = ExtResource("22_ionm7")
+
+[node name="Willow3" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8.38848, 0, 4.98469)
+mesh = ExtResource("23_macqb")
+
+[node name="WoodLogMoss" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.84281, -4.76837e-07, 4.81214)
+mesh = ExtResource("24_cuq2e")
